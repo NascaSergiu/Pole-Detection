@@ -1,0 +1,2 @@
+% bbGt version=3
+pole 365 1 38 355 0 0 0 0 0 0 0

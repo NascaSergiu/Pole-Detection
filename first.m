@@ -96,7 +96,7 @@ bbApply('draw',bbs);
 
 %% convert gray Image to rgb
 
-adjustImages('/Users/nascasergiualin/Documents/MATLAB/Poles/Negative', 'png', '/Users/nascasergiualin/Documents/MATLAB/Poles/Negative', 'png', @gray2rgb);
+adjustImages('C:\Users\NSE4CLJ\Desktop\Poles\Feature Labels', 'png', 'C:\Users\NSE4CLJ\Desktop\Poles\Feature Labels', 'png', @imadjust);
 
 %% another example
 
@@ -110,43 +110,54 @@ adjustImages('/Users/nascasergiualin/Documents/MATLAB/Poles/Negative', 'png', '/
 
 %% set up opts for training detector (see acfTrain)
 opts=acfTrain(); 
-opts.modelDs=[300 15]; 
-opts.modelDsPad=[440 22];
-%opts.pPyramid.pChns.pColor.smooth=0; 
-opts.pPyramid.pChns.pColor.colorSpace = 'gray';
+opts.modelDs=[270 15]; 
+opts.modelDsPad=[450 25];
+
 opts.nWeak=[64 256 1024 4096];
 opts.pBoost.pTree.maxDepth=5; 
 opts.pBoost.discrete=0;
-opts.pBoost.pTree.fracFtrs=1/16; 
-%opts.stride=7;
+opts.pBoost.pTree.fracFtrs=1/16;
+
+opts.pNms.overlap = 0.3;
+opts.pNms.thr = 20;
+
 opts.nNeg=25000; 
-%opts.nPerNeg=10;
 opts.nAccNeg=50000;
+ 
+opts.pPyramid.pChns.pColor.enabled = 0;
+opts.pPyramid.pChns.pColor.smooth = 1;
+opts.pPyramid.pChns.pColor.colorSpace = 'gray';
 opts.pPyramid.pChns.pGradHist.softBin=1; 
-opts.pJitter=struct('flip',1);
-opts.posGtDir='/Users/nascasergiualin/Documents/MATLAB/Poles/Annotations';
-opts.posImgDir='/Users/nascasergiualin/Documents/MATLAB/Poles/Positive';
-%opts.negImgDir='/Users/nascasergiualin/Documents/MATLAB/Poles/Negative';
-opts.pPyramid.pChns.shrink=2; 
-opts.name='/Users/nascasergiualin/Documents/MATLAB/Toolbox/Piotr_Dollar/toolbox-master/detector/models/Pole';
-pLoad={'lbls',{'pole'},'ilbls',{''}};
-opts.pLoad = [pLoad 'wRng', [3 inf]];
+opts.pPyramid.pChns.shrink = 2;
+
+%opts.pPyramid.pChns.pCustom = struct('enabled', 1, 'name', 'Custom Channel', 'hFunc', @myKernel);
+
+%opts.pJitter=struct('flip',1);
+
+opts.posGtDir='C:\Users\NSE4CLJ\Desktop\Poles\Annotations';
+opts.posImgDir='C:\Users\NSE4CLJ\Desktop\Poles\Positive 1ch';
+%opts.negImgDir='C:\Users\NSE4CLJ\Desktop\Poles\Negative';
+
+opts.name='D:\Matlab\Toolbox\Piotr_Dollar\toolbox-master\detector\models\PoleDetector';
+
+pLoad={'lbls',{'pole'},'ilbls',{''}, 'squarify',{11.0,.41}};
+opts.pLoad = [pLoad 'arRng', [-inf inf]];
 
 %% train detector (see acfTrain)
 detector = acfTrain( opts );
 
 %% modify detector (see acfModify)
-pModify=struct('cascThr',-1,'cascCal',.025);
+pModify=struct('cascThr',-1,'cascCal',.08);
 detector=acfModify(detector,pModify);
 
 %% run detector on a sample image (see acfDetect)
-imgNms=bbGt('getFiles',{['/Users/nascasergiualin/Documents/MATLAB/Poles/Positive' '']});
-I=imread(imgNms{15}); tic, bbs=acfDetect(I,detector); toc
+imgNms=bbGt('getFiles',{['C:\Users\NSE4CLJ\Desktop\Poles\Feature Labels' '']});
+I=imread(imgNms{18}); tic, bbs=acfDetect(I,detector); toc
 figure(1); im(I); bbApply('draw',bbs); pause(.1);
 
 %% test detector and plot roc (see acfTest)
-[~,~,gt,dt]=acfTest('name',opts.name,'imgDir',[dataDir 'test/images'],...
-  'gtDir',[dataDir 'test/annotations'],'pLoad',[pLoad, 'hRng',[50 inf],...
-  'vRng',[.65 1],'xRng',[5 635],'yRng',[5 475]],...
-  'pModify',pModify,'reapply',0,'show',2);
+[~,~,gt,dt]=acfTest('name',opts.name,'imgDir','C:\Users\NSE4CLJ\Desktop\Poles\Feature Labels',...
+  'gtDir','C:\Users\NSE4CLJ\Desktop\Poles\Feature Labels Annotations','pLoad',...
+  [pLoad, 'wRng', [3 inf], 'hRng', [10, inf], 'arRng', [-inf inf]],...
+  'pModify',pModify, 'show',2);
 

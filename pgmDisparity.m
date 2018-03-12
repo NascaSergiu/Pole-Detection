@@ -12,7 +12,7 @@ M_BASELINE = 0.1200007;
 M_FOCAL_LENGTH = 1378.359985;
 
 %% read pgm file
-img = imread('D:\Poze Licenta\Dump Images\007M287_20140106_064503\frappe\disparity\disp_007M287_20140106_064503_42256.pgm');
+img = imread('D:\Poze Licenta\Dump Images\AUDI-A4YH_20131211_145312_cropped_skip21s_duration21s\frappe\disparity\disp_AUDI-A4YH_20131211_145312_cropped_skip21s_duration21s_26282.pgm');
 img = double(img);
 
 %% create depth image from pgm image
@@ -28,7 +28,21 @@ imgDepth = (M_BASELINE * M_FOCAL_LENGTH) ./ imgDisparity;
 %% create output image based on depth image(matrix)
 imgOut = zeros( size(imgDepth, 1), size(imgDepth, 2), 3);
 
+current = hsv(113);
 
+for R=1:size(imgDepth, 1)
+    for C=1:size(imgDepth, 2)
+        if imgDepth(R, C) > 113
+            imgOut(R, C, 1) = 0.0;
+            imgOut(R, C, 2) = 0.0;
+            imgOut(R, C, 3) = 0.0;
+        else
+            imgOut(R, C, 1) = current(round(imgDepth(R, C)), 1);
+            imgOut(R, C, 2) = current(round(imgDepth(R, C)), 2);
+            imgOut(R, C, 3) = current(round(imgDepth(R, C)), 3);
+        end
+    end
+end
 
 figure;
-imshow(imgOut);
+im(imgOut);
