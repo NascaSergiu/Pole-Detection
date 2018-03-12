@@ -1,1 +1,2 @@
-adjustImages('C:\Users\NSE4CLJ\Desktop\Poles\Feature Labels', 'png', 'C:\Users\NSE4CLJ\Desktop\Poles\Feature Labels', 'png', @imadjust);
+adjustImages('D:\Poze Licenta\Dump Images\007M287_20131123_102822\frappe\disparity', 'pgm', ...
+    'D:\Poze Licenta\Dump Images\007M287_20131123_102822\frappe\disparity png', 'png', @pgmDisparity);

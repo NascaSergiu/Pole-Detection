@@ -56,7 +56,7 @@ detector = acfTrain( opts );
 pModify=struct('cascThr',-1,'cascCal',.08);
 detector=acfModify(detector,pModify);
 
-%%
+%% test on sample image
 if ismac
     imgNms=bbGt('getFiles',{['C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Feature Labels' '']});
 elseif ispc

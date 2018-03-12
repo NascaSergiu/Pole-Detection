@@ -1,17 +1,31 @@
 function adjustImages(inputDirPath, extensionInput, outputDirPath, extensionOutput, funcImage)
 
-name = char( strcat(inputDirPath, '\*', extensionInput));
+if ismac
+    name = char( strcat(inputDirPath, '/*', extensionInput));
+elseif ispc
+    name = char( strcat(inputDirPath, '\*', extensionInput));
+end
+
 imageFiles = dir(name);
 nfiles = length(imageFiles);
 
 for ii=1:nfiles
    currentFilename = imageFiles(ii).name;
-   filePath = strcat(inputDirPath, '\', currentFilename);
-   currentImage = imread(filePath);
    
+   if ismac
+        filePath = strcat(inputDirPath, '/', currentFilename);
+   elseif ispc
+        filePath = strcat(inputDirPath, '\', currentFilename);
+   end
+   
+   currentImage = imread(filePath);
    img = funcImage(currentImage);
    
-   name = strcat(outputDirPath, '\', extractBefore(currentFilename, length(currentFilename) - 3 ), '.', extensionOutput);
+   if ismac
+        name = strcat(outputDirPath, '/', extractBefore(currentFilename, length(currentFilename) - 4 ), '.', extensionOutput);
+   elseif ispc
+        name = strcat(outputDirPath, '\', extractBefore(currentFilename, length(currentFilename) - 3 ), '.', extensionOutput);
+   end
    name = char(name);
    
    imwrite(img, name);
