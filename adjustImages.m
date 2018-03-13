@@ -1,4 +1,4 @@
-function adjustImages(inputDirPath, extensionInput, outputDirPath, extensionOutput, funcImage)
+function adjustImages(inputDirPath, extensionInput, outputDirPath, extensionOutput, funcImage, params)
 
 if ismac
     name = char( strcat(inputDirPath, '/*', extensionInput));
@@ -19,7 +19,10 @@ for ii=1:nfiles
    end
    
    currentImage = imread(filePath);
-   img = funcImage(currentImage);
+   %currentImage = rgb2gray(currentImage);
+   img = funcImage(currentImage, params);
+   
+   %delete(filePath);
    
    if ismac
         name = strcat(outputDirPath, '/', extractBefore(currentFilename, length(currentFilename) - 4 ), '.', extensionOutput);

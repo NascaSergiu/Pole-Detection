@@ -9,7 +9,7 @@
 % Licensed under the Simplified BSD License [see external/bsd.txt]
 
 %% set up opts for training detector (see acfTrain)
-opts=acfTrain(); 
+opts=acfTrain();
 opts.modelDs=[270 15]; 
 opts.modelDsPad=[450 25];
 
@@ -30,7 +30,7 @@ opts.pPyramid.pChns.pColor.colorSpace = 'gray';
 opts.pPyramid.pChns.pGradHist.softBin=1; 
 opts.pPyramid.pChns.shrink = 2;
 
-%opts.pPyramid.pChns.pCustom = struct('enabled', 1, 'name', 'Custom Channel', 'hFunc', @myKernel);
+opts.pPyramid.pChns.pCustom = struct('enabled', 1, 'name', 'Custom Channel', 'hFunc', @myKernel);
 
 if ismac
     opts.posGtDir='C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Annotations';
@@ -39,21 +39,21 @@ if ismac
     opts.name='C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Toolbox\Piotr_Dollar\toolbox-master\detector\models\PoleDetector';
 elseif ispc
     opts.posGtDir='C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Annotations';
-    opts.posImgDir='C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Positive';
+    opts.posImgDir='C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Positive 1ch';
 
     opts.name='C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Toolbox\Piotr_Dollar\toolbox-master\detector\models\PoleDetector';
 end
 
 %opts.pJitter=struct('flip',1);
 
-pLoad={'lbls',{'pole'},'ilbls',{''}, 'squarify',{11.0,.41}};
+pLoad={'lbls',{'pole'},'ilbls',{''}, 'squarify',{9.5,.41}};
 opts.pLoad = [pLoad 'arRng', [-inf inf]];
 
 %% train detector (see acfTrain)
 detector = acfTrain( opts );
 
 %% modify detector (see acfModify)
-pModify=struct('cascThr',-1,'cascCal',.08);
+pModify=struct('cascThr',-1,'cascCal',.005);
 detector=acfModify(detector,pModify);
 
 %% test on sample image
@@ -63,9 +63,10 @@ elseif ispc
     imgNms=bbGt('getFiles',{['C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Feature Labels' '']});
 end
 
-I=imread(imgNms{19}); tic, bbs=acfDetect(I,detector); toc
-figure(1); im(I); bbApply('draw',bbs); pause(.1);
-
+for ii=1:50
+    I=imread(imgNms{ii}); tic, bbs=acfDetect(I,detector); toc
+    figure(1); im(I); bbApply('draw',bbs); pause(.75);
+end
 %% test detector and plot roc (see acfTest)
 % [~,~,gt,dt]=acfTest('name',opts.name,'imgDir','C:\Users\NSE4CLJ\Desktop\Poles\Feature Labels',...
 %   'gtDir','C:\Users\NSE4CLJ\Desktop\Poles\Feature Labels Annotations','pLoad',...
