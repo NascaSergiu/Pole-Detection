@@ -22,7 +22,6 @@ function I = pgmDisparityToPng(img, varargin)
     imgDisparity = imgDisparity * G_FLOAT_FACTOR;
 
     imgDepth = (M_BASELINE * M_FOCAL_LENGTH) ./ imgDisparity;
-    %imagesc(imgDepth ,[0 113]); colormap(parula);
 
     % create output image based on depth image(matrix)
     imgOut = zeros( size(imgDepth, 1), size(imgDepth, 2), 3);

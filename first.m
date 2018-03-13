@@ -53,7 +53,7 @@ opts.pLoad = [pLoad 'arRng', [-inf inf]];
 detector = acfTrain( opts );
 
 %% modify detector (see acfModify)
-pModify=struct('cascThr',-1,'cascCal',.005);
+pModify=struct('cascThr',-1,'cascCal',.015);
 detector=acfModify(detector,pModify);
 
 %% test on sample image
@@ -65,7 +65,7 @@ end
 
 for ii=1:50
     I=imread(imgNms{ii}); tic, bbs=acfDetect(I,detector); toc
-    figure(1); im(I); bbApply('draw',bbs); pause(.75);
+    figure(1); im(I); bbApply('draw',bbs); pause(.5);
 end
 %% test detector and plot roc (see acfTest)
 % [~,~,gt,dt]=acfTest('name',opts.name,'imgDir','C:\Users\NSE4CLJ\Desktop\Poles\Feature Labels',...
