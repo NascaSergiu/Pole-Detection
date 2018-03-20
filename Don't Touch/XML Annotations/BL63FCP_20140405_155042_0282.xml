@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><annotation>
+	<folder>Poles</folder>
+	<filename>BL63FCP_20140405_155042_0282.xml</filename>
+	<path>C:\Users\NSE4CLJ\Desktop\Poles\BL63FCP_20140405_155042_f001201.png</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1280</width>
+		<height>720</height>
+		<depth>1</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1162</xmin>
+			<ymin>6</ymin>
+			<xmax>1186</xmax>
+			<ymax>444</ymax>
+		</bndbox>
+	</object>
+</annotation>

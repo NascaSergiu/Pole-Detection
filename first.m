@@ -34,12 +34,12 @@ opts.pPyramid.pChns.pCustom = struct('enabled', 1, 'name', 'Custom Channel', 'hF
 
 if ismac
     opts.posGtDir='C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Annotations';
-    opts.posImgDir='C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Positive';
+    opts.posImgDir='C:\Users\NSE4CLJ\Desktop\Images';
 
     opts.name='C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Toolbox\Piotr_Dollar\toolbox-master\detector\models\PoleDetector';
 elseif ispc
-    opts.posGtDir='C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Annotations';
-    opts.posImgDir='C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Positive 1ch';
+    opts.posGtDir='C:\Users\NSE4CLJ\Desktop\XML Poles - Modify\New';
+    opts.posImgDir='C:\Users\NSE4CLJ\Desktop\Images';
 
     opts.name='C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Toolbox\Piotr_Dollar\toolbox-master\detector\models\PoleDetector';
 end
@@ -65,7 +65,7 @@ end
 
 for ii=1:50
     I=imread(imgNms{ii}); tic, bbs=acfDetect(I,detector); toc
-    figure(1); im(I); bbApply('draw',bbs); pause(.5);
+    figure(1); im(I); bbApply('draw',bbs); pause(.75);
 end
 %% test detector and plot roc (see acfTest)
 % [~,~,gt,dt]=acfTest('name',opts.name,'imgDir','C:\Users\NSE4CLJ\Desktop\Poles\Feature Labels',...
