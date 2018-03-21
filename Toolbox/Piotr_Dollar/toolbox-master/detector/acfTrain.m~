@@ -288,110 +288,53 @@ function [Is,IsOrig] = sampleWins( detector, stage, positive )
 % Load or sample windows for training detector.
 opts=detector.opts; 
 start=clock;
-
 if( positive )
     n=opts.nPos; 
 else
     n=opts.nNeg; 
 end
-
 if( positive )
     crDir=opts.posWinDir; 
 else
     crDir=opts.negWinDir; 
 end
-
 if( exist(crDir,'dir') && stage==0 )
   % if window directory is specified simply load windows
-  fs=bbGt('getFiles',{crDir}); 
-  nImg=length(fs); assert(nImg>0);
-  
-  if(nImg>n)
-      fs=fs(:,randSample(nImg,n)); 
-  else
-      n=nImg; 
-  end
-  
-  for i=1:n
-      fs{i}=[{opts.imreadf},fs(i),opts.imreadp]; 
-  end
-  
-  Is=cell(1,n); 
-  
-  parfor i=1:n
-      Is{i}=feval(fs{i}{:}); 
-  end
+  fs=bbGt('getFiles',{crDir}); nImg=length(fs); assert(nImg>0);
+  if(nImg>n), fs=fs(:,randSample(nImg,n)); else n=nImg; end
+  for i=1:n, fs{i}=[{opts.imreadf},fs(i),opts.imreadp]; end
+  Is=cell(1,n); parfor i=1:n, Is{i}=feval(fs{i}{:}); end
 else
   % sample windows from full images using sampleWins1()
-  hasGt=positive||isempty(opts.negImgDir); 
-  fs={opts.negImgDir};
-  
-  if(hasGt)
-      fs={opts.posImgDir,opts.posGtDir}; 
-  end
-  
-  fs=bbGt('getFiles',fs); 
-  nImg=size(fs,2); 
-  assert(nImg>0);
-  if(~isinf(n))
-      fs=fs(:,randperm(nImg)); 
-  end; 
-  Is=cell(nImg*1000,1);
-  diary('off'); 
-  tid=ticStatus('Sampling windows',1,30); 
-  k=0; 
-  i=0; 
-  batch=64;
+  hasGt=positive||isempty(opts.negImgDir); fs={opts.negImgDir};
+  if(hasGt), fs={opts.posImgDir,opts.posGtDir}; end
+  fs=bbGt('getFiles',fs); nImg=size(fs,2); assert(nImg>0);
+  if(~isinf(n)), fs=fs(:,randperm(nImg)); end; Is=cell(nImg*1000,1);
+  diary('off'); tid=ticStatus('Sampling windows',1,30); k=0; i=0; batch=64;
   while( i<nImg && k<n )
-    batch=min(batch,nImg-i); 
-    Is1=cell(1,batch);
+    batch=min(batch,nImg-i); Is1=cell(1,batch);
     parfor j=1:batch, ij=i+j;
       I = feval(opts.imreadf,fs{1,ij},opts.imreadp{:}); %#ok<PFBNS>
-      gt=[]; 
-      if(hasGt)
-          [~,gt]=bbGt('bbLoad',fs{2,ij},opts.pLoad); 
-      end
+      gt=[]; if(hasGt), [~,gt]=bbGt('bbLoad',fs{2,ij},opts.pLoad); end
       Is1{j} = sampleWins1( I, gt, detector, stage, positive );
     end
-    Is1=[Is1{:}]; 
-    k1=length(Is1); 
-    Is(k+1:k+k1)=Is1; 
-    k=k+k1;
-    if(k>n)
-        Is=Is(randSample(k,n)); 
-        k=n; 
-    end
-    i=i+batch;
-    tocStatus(tid,max(i/nImg,k/n));
+    Is1=[Is1{:}]; k1=length(Is1); Is(k+1:k+k1)=Is1; k=k+k1;
+    if(k>n), Is=Is(randSample(k,n)); k=n; end
+    i=i+batch; tocStatus(tid,max(i/nImg,k/n));
   end
-  Is=Is(1:k); 
-  diary('on');
+  Is=Is(1:k); diary('on');
   fprintf('Sampled %i windows from %i images.\n',k,i);
 end
 % optionally jitter positive windows
-if(length(Is)<2)
-    Is={}; 
-    return; 
-end
-nd=ndims(Is{1})+1; 
-Is=cat(nd,Is{:}); 
-IsOrig=Is;
-
+if(length(Is)<2), Is={}; return; end
+nd=ndims(Is{1})+1; Is=cat(nd,Is{:}); IsOrig=Is;
 if( positive && isstruct(opts.pJitter) )
-  opts.pJitter.hasChn=(nd==4); 
-  Is=jitterImage(Is,opts.pJitter);
-  ds=size(Is); 
-  ds(nd)=ds(nd)*ds(nd+1); 
-  Is=reshape(Is,ds(1:nd));
+  opts.pJitter.hasChn=(nd==4); Is=jitterImage(Is,opts.pJitter);
+  ds=size(Is); ds(nd)=ds(nd)*ds(nd+1); Is=reshape(Is,ds(1:nd));
 end
-
 % make sure dims are divisible by shrink and not smaller than modelDsPad
-ds=size(Is); 
-cr=rem(ds(1:2),opts.pPyramid.pChns.shrink); 
-s=floor(cr/2)+1;
-e=ceil(cr/2); 
-Is=Is(s(1):end-e(1),s(2):end-e(2),:,:); 
-ds=size(Is);
+ds=size(Is); cr=rem(ds(1:2),opts.pPyramid.pChns.shrink); s=floor(cr/2)+1;
+e=ceil(cr/2); Is=Is(s(1):end-e(1),s(2):end-e(2),:,:); ds=size(Is);
 if(any(ds(1:2)<opts.modelDsPad)), error('Windows too small.'); end
 % optionally save windows to disk and update log
 nm=[opts.name 'Is' int2str(positive) 'Stage' int2str(stage)];
