@@ -47,7 +47,7 @@ function I = pgmDisparityToPng(img, varargin)
 
     for R=1:size(imgDepth, 1)
         for C=1:size(imgDepth, 2)
-            if imgDepth(R, C) > 113
+            if imgDepth(R, C) > G_DISP_MAX_DISPARITY
                 imgOut(R, C, 1) = 0.0;
                 imgOut(R, C, 2) = 0.0;
                 imgOut(R, C, 3) = 0.0;

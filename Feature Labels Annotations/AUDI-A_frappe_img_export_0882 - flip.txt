@@ -1,2 +1,0 @@
-% bbGt version=3
-pole 505 322 5 62 0 0 0 0 0 0 0
