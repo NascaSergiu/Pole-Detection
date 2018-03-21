@@ -1,6 +1,6 @@
 %% for disparity
-adjustImages('C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Do Not Touch\Positive Gray Scale', 'bmp', ...
-    'C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Do Not Touch\Flip Positive Gray Scale', 'bmp', @flipdim);
+adjustImages('C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Do Not Touch\Positive Disparity', 'pgm', ...
+    'C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Do Not Touch\Flip Positive Disparity', 'pgm', @fliplr);
 
 %% for dump images
 

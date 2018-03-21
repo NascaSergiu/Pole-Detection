@@ -20,7 +20,7 @@ for ii=1:nfiles
    
    currentImage = imread(filePath);
    %currentImage = rgb2gray(currentImage);
-   img = funcImage(currentImage, 2);
+   img = funcImage(currentImage);
    
    %delete(filePath);
    
