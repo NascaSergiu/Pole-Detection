@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><annotation>
+	<folder>Images</folder>
+	<filename>VA63KRO_X760_20141109_142116_0182.bmp</filename>
+	<path>C:\Users\NSE4CLJ\Desktop\Images\VA63KRO_X760_20141109_142116_0182.bmp</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1280</width>
+		<height>720</height>
+		<depth>1</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>282</xmin>
+			<ymin>6</ymin>
+			<xmax>298</xmax>
+			<ymax>435</ymax>
+		</bndbox>
+	</object>
+</annotation>
