@@ -1,6 +1,6 @@
 %% for disparity
-adjustImages('D:\Poze Licenta\Dump Images\AUDI-A4YH_20131118_091731\frappe\disparity', 'pgm', ...
-    'D:\Poze Licenta\Dump Images\AUDI-A4YH_20131118_091731\frappe\disparity png', 'png', @pgmDisparityToPng, {'colormap', 'hsv'});
+adjustImages('C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Do Not Touch\Positive Gray Scale', 'bmp', ...
+    'C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Do Not Touch\Flip Positive Gray Scale', 'bmp', @flipdim);
 
 %% for dump images
 
