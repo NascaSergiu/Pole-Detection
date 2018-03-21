@@ -33,8 +33,13 @@ opts.pPyramid.pChns.shrink = 2;
 opts.pPyramid.pChns.pCustom = struct('enabled', 1, 'name', 'Custom Channel', 'hFunc', @myKernel);
 
 if ismac
+<<<<<<< HEAD
     opts.posGtDir='/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Annotations';
     opts.posImgDir='/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive';
+=======
+    opts.posGtDir='C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Annotations';
+    opts.posImgDir='C:\Users\NSE4CLJ\Desktop\Images';
+>>>>>>> 540ac577ece92fe6260bd9ab49a16d22444528d2
 
     opts.name='/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Toolbox/Piotr_Dollar/toolbox-master/detector/models/PoleDetector';
 elseif ispc

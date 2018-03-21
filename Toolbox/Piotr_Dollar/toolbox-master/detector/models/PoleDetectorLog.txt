@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------
 Training stage 0
 <<<<<<< HEAD
+<<<<<<< HEAD
 Sampled 1800 windows from 604 images.
 Done sampling windows (time=18s).
 Computing lambdas... done (time=12s).
@@ -17,5 +18,7 @@ Done training err=0.0000 fp=0.0000 fn=0.0000 (t=47.0s).
 Done training stage 0 (time=116s).
 ---------------------------------------------------------------------------
 Training stage 1
+=======
+>>>>>>> 540ac577ece92fe6260bd9ab49a16d22444528d2
 =======
 >>>>>>> 540ac577ece92fe6260bd9ab49a16d22444528d2
