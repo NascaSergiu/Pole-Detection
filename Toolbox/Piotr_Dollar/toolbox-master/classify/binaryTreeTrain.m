@@ -10,8 +10,8 @@ function [tree,data,err] = binaryTreeTrain( data, varargin )
 % forests, this code is tuned for use with boosting (see adaBoostTrain.m).
 %
 % For more information on how to quickly boost decision trees see:
-%   [1] R. Appel, T. Fuchs, P. Dollár, P. Perona; "Quickly Boosting
-%   Decision Trees – Pruning Underachieving Features Early," ICML 2013.
+%   [1] R. Appel, T. Fuchs, P. Doll?r, P. Perona; "Quickly Boosting
+%   Decision Trees ? Pruning Underachieving Features Early," ICML 2013.
 % The code here implements a simple brute-force strategy with the option to
 % sample features used for training each node for additional speedups.
 % Further gains using the ideas from the ICML paper are possible. If you
@@ -69,7 +69,9 @@ assert(nBins<=256);
 dfs={ 'X0','REQ', 'X1','REQ', 'wts0',[], 'wts1',[], ...
   'xMin',[], 'xStep',[], 'xType',[] };
 [X0,X1,wts0,wts1,xMin,xStep,xType]=getPrmDflt(data,dfs,1);
-[N0,F]=size(X0); [N1,F1]=size(X1); assert(F==F1);
+[N0,F]=size(X0); 
+[N1,F1]=size(X1); 
+%assert(F==F1);
 if(isempty(xType)), xMin=zeros(1,F); xStep=ones(1,F); xType=class(X0); end
 assert(isfloat(wts0)); if(isempty(wts0)), wts0=ones(N0,1)/N0; end
 assert(isfloat(wts1)); if(isempty(wts1)), wts1=ones(N1,1)/N1; end

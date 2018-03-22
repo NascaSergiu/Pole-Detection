@@ -107,7 +107,11 @@ function objs = create( n )
 %
 % See also bbGt
 o=struct('lbl','','bb',[0 0 0 0],'occ',0,'bbv',[0 0 0 0],'ign',0,'ang',0);
-if(nargin<1 || n==1), objs=o; return; end; objs=o(ones(n,1));
+if(nargin<1 || n==1)
+    objs=o; 
+    return; 
+end; 
+objs=o(ones(n,1));
 end
 
 function objs = bbSave( objs, fName )
@@ -126,15 +130,16 @@ function objs = bbSave( objs, fName )
 % EXAMPLE
 %
 % See also bbGt, bbGt>bbLoad
-vers=3; fid=fopen(fName,'w'); assert(fid>0);
+vers=3; 
+fid=fopen(fName,'w'); 
+assert(fid>0);
 fprintf(fid,'%% bbGt version=%i\n',vers);
 objs=set(objs,'bb',round(get(objs,'bb')));
 objs=set(objs,'bbv',round(get(objs,'bbv')));
 objs=set(objs,'ang',round(get(objs,'ang')));
 for i=1:length(objs)
   o=objs(i); bb=o.bb; bbv=o.bbv;
-  fprintf(fid,['%s' repmat(' %i',1,11) '\n'],o.lbl,...
-    bb,o.occ,bbv,o.ign,o.ang);
+  fprintf(fid,['%s' repmat(' %i',1,11) '\n'],o.lbl, bb,o.occ,bbv,o.ign,o.ang);
 end
 fclose(fid);
 end
@@ -443,34 +448,75 @@ if(nargin<2 || isempty(f0)), f0=1; end
 if(nargin<3 || isempty(f1)), f1=inf; end
 m=length(dirs); assert(m>0); sep=filesep;
 
-for d=1:m, dir1=dirs{d}; dir1(dir1=='\')=sep; dir1(dir1=='/')=sep;
-  if(dir1(end)==sep), dir1(end)=[]; end; dirs{d}=dir1; end
+for d=1:m
+    dir1=dirs{d}; 
+    dir1(dir1=='\')=sep; 
+    dir1(dir1=='/')=sep;
+  if(dir1(end)==sep)
+      dir1(end)=[]; 
+  end; 
+  dirs{d}=dir1; 
+end
 
 [fs0,fs1] = getFiles0(dirs{1},f0,f1,sep);
-n1=length(fs0); fs=cell(m,n1); fs(1,:)=fs1;
-for d=2:m, fs(d,:)=getFiles1(dirs{d},fs0,sep); end
+n1=length(fs0); 
+fs=cell(m,n1); 
+fs(1,:)=fs1;
+
+for d=2:m
+    fs(d,:)=getFiles1(dirs{d},fs0,sep); 
+end
 
   function [fs0,fs1] = getFiles0( dir1, f0, f1, sep )
     % get fs1 in dir1 (and fs0 without path or extension)
-    fs1=dir([dir1 sep '*']); fs1={fs1.name}; fs1=fs1(3:end);
-    fs1=fs1(f0:min(f1,end)); fs0=fs1; n=length(fs0);
-    if(n==0), error('No files found in baseline dir %s.',dir1); end
-    for i=1:n, fs1{i}=[dir1 sep fs0{i}]; end
-    n=length(fs0); for i=1:n, f=fs0{i};
-      f(find(f=='.',1,'first'):end)=[]; fs0{i}=f; end
+    fs1=dir([dir1 sep '*']); 
+    fs1={fs1.name}; 
+    fs1=fs1(3:end);
+    fs1=fs1(f0:min(f1,end)); 
+    fs0=fs1; 
+    n=length(fs0);
+    if(n==0)
+        error('No files found in baseline dir %s.',dir1); 
+    end
+    for i=1:n
+        fs1{i}=[dir1 sep fs0{i}]; 
+    end
+    n=length(fs0); 
+    for i=1:n
+        f=fs0{i};
+        f(find(f=='.',1,'first'):end)=[]; 
+        fs0{i}=f; 
+    end
   end
 
   function fs1 = getFiles1( dir1, fs0, sep )
     % get fs1 in dir1 corresponding to fs0
-    n=length(fs0); fs1=cell(1,n); i2=0; i1=0;
-    fs2=dir(dir1); fs2={fs2.name}; n2=length(fs2);
+    n=length(fs0); 
+    fs1=cell(1,n); 
+    i2=0; i1=0;
+    fs2=dir(dir1); 
+    fs2={fs2.name}; 
+    n2=length(fs2);
     eMsg='''%s'' has no corresponding file in %s.';
-    for i0=1:n, r=length(fs0{i0}); match=0;
-      while(i2<n2), i2=i2+1; if(strcmpi(fs0{i0},fs2{i2}(1:min(end,r))))
-          i1=i1+1; fs1{i1}=fs2{i2}; match=1; break; end; end
-      if(~match), error(eMsg,fs0{i0},dir1); end
+    for i0=1:n
+        r=length(fs0{i0}); 
+        match=0;
+        while(i2<n2)
+            i2=i2+1; 
+            if(strcmpi(fs0{i0},fs2{i2}(1:min(end,r))))
+                i1=i1+1; 
+                fs1{i1}=fs2{i2}; 
+                match=1; 
+                break; 
+            end; 
+        end
+        if(~match)
+            error(eMsg,fs0{i0},dir1); 
+        end
     end
-    for i1=1:n, fs1{i1}=[dir1 sep fs1{i1}]; end
+    for i1=1:n
+        fs1{i1}=[dir1 sep fs1{i1}]; 
+    end
   end
 end
 

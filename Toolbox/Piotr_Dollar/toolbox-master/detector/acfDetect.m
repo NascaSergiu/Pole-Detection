@@ -36,18 +36,36 @@ function bbs = acfDetect( I, detector, fileName )
 % Licensed under the Simplified BSD License [see external/bsd.txt]
 
 % run detector on every image
-if(nargin<3), fileName=''; end; multiple=iscell(I);
-if(~isempty(fileName) && exist(fileName,'file')), bbs=1; return; end
-if(~multiple), bbs=acfDetectImg(I,detector); else
-  n=length(I); bbs=cell(n,1);
-  parfor i=1:n, bbs{i}=acfDetectImg(I{i},detector); end
+if(nargin<3)
+    fileName=''; 
+end; 
+multiple=iscell(I);
+if(~isempty(fileName) && exist(fileName,'file'))
+    bbs=1; 
+    return; 
+end
+if(~multiple)
+    bbs=acfDetectImg(I,detector); 
+else
+  n=length(I); 
+  bbs=cell(n,1);
+  parfor i=1:n
+      bbs{i}=acfDetectImg(I{i},detector); 
+  end
 end
 
 % write results to disk if fileName specified
-if(isempty(fileName)), return; end
-d=fileparts(fileName); if(~isempty(d)&&~exist(d,'dir')), mkdir(d); end
+if(isempty(fileName))
+    return; 
+end
+d=fileparts(fileName); 
+if(~isempty(d)&&~exist(d,'dir'))
+    mkdir(d); 
+end
 if( multiple ) % add image index to each bb and flatten result
-  for i=1:n, bbs{i}=[ones(size(bbs{i},1),1)*i bbs{i}]; end
+  for i=1:n
+      bbs{i}=[ones(size(bbs{i},1),1)*i bbs{i}]; 
+  end
   bbs=cell2mat(bbs);
 end
 dlmwrite(fileName,bbs); bbs=1;
@@ -56,17 +74,30 @@ end
 
 function bbs = acfDetectImg( I, detector )
 % Run trained sliding-window object detector on given image.
-Ds=detector; if(~iscell(Ds)), Ds={Ds}; end; nDs=length(Ds);
-opts=Ds{1}.opts; pPyramid=opts.pPyramid; pNms=opts.pNms;
-imreadf=opts.imreadf; imreadp=opts.imreadp;
-shrink=pPyramid.pChns.shrink; pad=pPyramid.pad;
+Ds=detector; 
+if(~iscell(Ds))
+    Ds={Ds}; 
+end; 
+nDs=length(Ds);
+opts=Ds{1}.opts; 
+pPyramid=opts.pPyramid; 
+pNms=opts.pNms;
+imreadf=opts.imreadf; 
+imreadp=opts.imreadp;
+shrink=pPyramid.pChns.shrink; 
+pad=pPyramid.pad;
 separate=nDs>1 && isfield(pNms,'separate') && pNms.separate;
 % read image and compute features (including optionally applying filters)
-if(all(ischar(I))), I=feval(imreadf,I,imreadp{:}); end
-P=chnsPyramid(I,pPyramid); bbs=cell(P.nScales,nDs);
+if(all(ischar(I)))
+    I=feval(imreadf,I,imreadp{:}); 
+end
+P=chnsPyramid(I,pPyramid); 
+bbs=cell(P.nScales,nDs);
 if(isfield(opts,'filters') && ~isempty(opts.filters)), shrink=shrink*2;
   for i=1:P.nScales, fs=opts.filters; C=repmat(P.data{i},[1 1 size(fs,4)]);
-    for j=1:size(C,3), C(:,:,j)=conv2(C(:,:,j),fs(:,:,j),'same'); end
+    for j=1:size(C,3)
+        C(:,:,j)=conv2(C(:,:,j),fs(:,:,j),'same'); 
+    end
     P.data{i}=imResample(C,.5);
   end
 end

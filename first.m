@@ -9,37 +9,39 @@
 % Licensed under the Simplified BSD License [see external/bsd.txt]
 
 %% set up opts for training detector (see acfTrain)
-opts=acfTrain();
-opts.modelDs=[270 15]; 
-opts.modelDsPad=[450 25];
+opts = acfTrain();
+opts.modelDs = [270 15]; 
+opts.modelDsPad = [450 25];
 
-opts.nWeak=[64 256 1024 4096];
-opts.pBoost.pTree.maxDepth=5; 
-opts.pBoost.discrete=0;
-opts.pBoost.pTree.fracFtrs=1/16;
+opts.nWeak = [64 256 1024 4096];
+opts.pBoost.pTree.maxDepth = 5; 
+opts.pBoost.discrete = 0;
+opts.pBoost.pTree.fracFtrs = 1/16;
 
 opts.pNms.overlap = 0.3;
 opts.pNms.thr = 20;
 
-opts.nNeg=25000; 
-opts.nAccNeg=50000;
+opts.nNeg = 25000; 
+opts.nAccNeg = 50000;
  
 opts.pPyramid.pChns.pColor.enabled = 0;
 opts.pPyramid.pChns.pColor.smooth = 1;
 opts.pPyramid.pChns.pColor.colorSpace = 'gray';
-opts.pPyramid.pChns.pGradHist.softBin=1; 
+opts.pPyramid.pChns.pGradHist.softBin = 1; 
 opts.pPyramid.pChns.shrink = 2;
 
-opts.pPyramid.pChns.pCustom = struct('enabled', 1, 'name', 'Custom Channel', 'hFunc', @myKernel);
+%opts.pPyramid.pChns.pCustom = struct('enabled', 1, 'name', 'Custom Channel', 'hFunc', @myKernel);
 
 if ismac
-    opts.posGtDir='/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Annotations';
-    opts.posImgDir='/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive';
+    opts.posGtDir = '/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Annotations';
+    opts.posImgDir = '/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray';
+    opts.dispPgmDir = '/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Disparity';
 
     opts.name='/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Toolbox/Piotr_Dollar/toolbox-master/detector/models/PoleDetector';
 elseif ispc
-    opts.posGtDir='C:\Users\NSE4CLJ\Desktop\XML Poles - Modify\New';
-    opts.posImgDir='C:\Users\NSE4CLJ\Desktop\Images';
+    opts.posGtDir = 'C:\Users\NSE4CLJ\Desktop\XML Poles - Modify\New';
+    opts.posImgDir = 'C:\Users\NSE4CLJ\Desktop\Images';
+    opts.dispPgmDir = '';
 
     opts.name='C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Toolbox\Piotr_Dollar\toolbox-master\detector\models\PoleDetector';
 end

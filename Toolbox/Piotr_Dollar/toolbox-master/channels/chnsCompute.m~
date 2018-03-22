@@ -151,15 +151,12 @@ end
 h=h/shrink; 
 w=w/shrink;
 
-ImgGray = [];
-ImgDisp = [];
-
 % compute color channels
 p=pChns.pColor; 
 nm='color channels';
 if size(I, 3) == 4
     ImgGray = I(:,:,1:3);
-    ImgGray = rgbConvert(ImgGray, p.colorSpace);
+    ImgGray = rgbConvert(ImgGray, p.colorSpce);
     ImgDisp = I(:,:,4);
 elseif size(I, 3) == 2
     ImgGray = I(:,:,1);
@@ -170,67 +167,36 @@ end
 
 ImgGray = single(ImgGray);
 ImgGray = convTri(ImgGray, p.smooth);
-
-ImgDisp = single(ImgDisp);
-ImgDisp = convTri(ImgDisp, p.smooth);
 if(p.enabled)
     chns=addChn(chns, ImgGray, nm, p, 'replicate', h, w); 
 end
 
 % compute gradient magnitude channel for gray image
 p = pChns.pGradMag; 
-nm = 'gradient magnitude gray image';
+nm = 'gradient magnitude ';
 full = 0; 
 if(isfield(p,'full'))
     full = p.full; 
 end
 if( pChns.pGradHist.enabled )
-  [MGray, OGray] = gradientMag(ImgGray, p.colorChn, p.normRad, p.normConst, full);
+  [M, O] = gradientMag(ImgGray, p.colorChn, p.normRad, p.normConst, full);
 elseif( p.enabled )
-  MGray = gradientMag(ImgGray, p.colorChn, p.normRad, p.normConst, full);
+  M = gradientMag(ImgGray, p.colorChn, p.normRad, p.normConst, full);
 end
 if(p.enabled)
-    chns = addChn(chns, MGray, nm, p, 0, h, w); 
-end
-
-% compute gradient magnitude channel for gray image
-p = pChns.pGradMag; 
-nm = 'gradient magnitude disparity image';
-full = 0; 
-if(isfield(p,'full'))
-    full = p.full; 
-end
-if( pChns.pGradHist.enabled )
-  [MDisp, ODisp] = gradientMag(ImgDisp, p.colorChn, p.normRad, p.normConst, full);
-elseif( p.enabled )
-  MDisp = gradientMag(ImgDisp, p.colorChn, p.normRad, p.normConst, full);
-end
-if(p.enabled)
-    chns = addChn(chns, MDisp, nm, p, 0, h, w); 
+    chns = addChn(chns, M, nm, p, 0, h, w); 
 end
 
 % compute gradient histgoram channels for gray image
 p = pChns.pGradHist; 
-nm = 'gradient histogram gray image';
+nm = 'gradient histogram';
 if( p.enabled )
   binSize = p.binSize; 
   if(isempty(binSize))
       binSize = shrink; 
   end
-  HGray = gradientHist(MGray, OGray, binSize, p.nOrients, p.softBin, p.useHog, p.clipHog, full);
-  chns = addChn(chns, HGray, nm, pChns.pGradHist, 0, h, w);
-end
-
-% compute gradient histgoram channels for gray image
-p = pChns.pGradHist; 
-nm = 'gradient histogram disparity image';
-if( p.enabled )
-  binSize = p.binSize; 
-  if(isempty(binSize))
-      binSize = shrink; 
-  end
-  HDisp = gradientHist(MDisp, ODisp, binSize, p.nOrients, p.softBin, p.useHog, p.clipHog, full);
-  chns = addChn(chns, HDisp, nm, pChns.pGradHist, 0, h, w);
+  H = gradientHist(M, O, binSize, p.nOrients, p.softBin, p.useHog, p.clipHog, full);
+  chns = addChn(chns, H, nm, pChns.pGradHist, 0, h, w);
 end
 
 % compute custom channels for gray image
