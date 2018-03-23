@@ -11,7 +11,7 @@
 %% set up opts for training detector (see acfTrain)
 opts = acfTrain();
 opts.modelDs = [270 15]; 
-opts.modelDsPad = [450 25];
+opts.modelDsPad = [810 45];
 
 opts.nWeak = [64 256 1024 4096];
 opts.pBoost.pTree.maxDepth = 5; 
@@ -41,7 +41,7 @@ if ismac
 elseif ispc
     opts.posGtDir = 'C:\Users\NSE4CLJ\Desktop\XML Poles - Modify\New';
     opts.posImgDir = 'C:\Users\NSE4CLJ\Desktop\Images';
-    opts.dispPgmDir = '';
+    %opts.dispPgmDir = '';
 
     opts.name='C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Toolbox\Piotr_Dollar\toolbox-master\detector\models\PoleDetector';
 end
@@ -60,14 +60,24 @@ detector=acfModify(detector,pModify);
 
 %% test on sample image
 if ismac
-    imgNms=bbGt('getFiles',{['/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Feature Labels' '']});
+    imgNms = bbGt('getFiles', ...
+        {'/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray', ...
+        '/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Disparity'});
 elseif ispc
-    imgNms=bbGt('getFiles',{['C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Feature Labels' '']});
+    imgNms = bbGt('getFiles', ...
+        {'C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Feature Labels', ...
+        ''});
 end
 
-for ii=1:50
-    I=imread(imgNms{ii}); tic, bbs=acfDetect(I,detector); toc
-    figure(1); im(I); bbApply('draw',bbs); pause(.75);
+for ii = 100:200
+    ImgGray = imread(imgNms{1, ii});
+    ImgDisp = imread(imgNms{2, ii});
+    ImgComb = ImgAndDisp2Img(ImgGray, ImgDisp, opts);
+    bbs = acfDetect(ImgComb, detector);
+    figure(1); 
+    im(ImgGray); 
+    bbApply('draw', bbs); 
+    pause(.25);
 end
 %% test detector and plot roc (see acfTest)
 % [~,~,gt,dt]=acfTest('name',opts.name,'imgDir','C:\Users\NSE4CLJ\Desktop\Poles\Feature Labels',...
