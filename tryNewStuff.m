@@ -1,6 +1,6 @@
 %% for disparity
-adjustImages('C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Do Not Touch\Positive Disparity', 'pgm', ...
-    'C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Do Not Touch\Flip Positive Disparity', 'pgm', @fliplr);
+adjustImages('D:\CompareGabi\LB-X_5326_20160922_16122820170223_150152\image_view', 'bmp', ...
+    'D:\CompareGabi\LB-X_5326_20160922_16122820170223_150152\image_view', 'bmp', @imadjust);
 
 %% for dump images
 

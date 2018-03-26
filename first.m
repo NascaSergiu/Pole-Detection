@@ -11,7 +11,7 @@
 %% set up opts for training detector (see acfTrain)
 opts = acfTrain();
 opts.modelDs = [270 15]; 
-opts.modelDsPad = [810 45];
+opts.modelDsPad = [540 30];
 
 opts.nWeak = [64 256 1024 4096];
 opts.pBoost.pTree.maxDepth = 5; 
@@ -30,7 +30,16 @@ opts.pPyramid.pChns.pColor.colorSpace = 'gray';
 opts.pPyramid.pChns.pGradHist.softBin = 1; 
 opts.pPyramid.pChns.shrink = 2;
 
-%opts.pPyramid.pChns.pCustom = struct('enabled', 1, 'name', 'Custom Channel', 'hFunc', @myKernel);
+opts.pPyramid.pChns.pDisparity.enabled = 1;
+opts.pPyramid.pChns.pDisparity.maxDepth = 40;
+opts.pPyramid.pChns.pDisparity.periodicalFlagU16 = 8192;
+opts.pPyramid.pChns.pDisparity.uniquenessFlagU16 = 4096;
+opts.pPyramid.pChns.pDisparity.valueMaskU16 = 2047;
+
+opts.pPyramid.pChns.pDisparity.floatFactor = 0.0625;
+
+opts.pPyramid.pChns.pDisparity.baseline = 0.1200007;
+opts.pPyramid.pChns.pDisparity.focalLength = 1378.359985;
 
 if ismac
     opts.posGtDir = '/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Annotations';
@@ -39,14 +48,12 @@ if ismac
 
     opts.name='/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Toolbox/Piotr_Dollar/toolbox-master/detector/models/PoleDetector';
 elseif ispc
-    opts.posGtDir = 'C:\Users\NSE4CLJ\Desktop\XML Poles - Modify\New';
-    opts.posImgDir = 'C:\Users\NSE4CLJ\Desktop\Images';
-    %opts.dispPgmDir = '';
+    opts.posGtDir = 'C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Annotations';
+    opts.posImgDir = 'C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Positive Gray';
+    opts.dispPgmDir = 'C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Positive Disparity';
 
     opts.name='C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Toolbox\Piotr_Dollar\toolbox-master\detector\models\PoleDetector';
 end
-
-%opts.pJitter=struct('flip',1);
 
 pLoad={'lbls',{'pole'},'ilbls',{''}, 'squarify',{9.5,.41}};
 opts.pLoad = [pLoad 'arRng', [-inf inf]];
@@ -58,6 +65,10 @@ detector = acfTrain( opts );
 pModify=struct('cascThr',-1,'cascCal',.015);
 detector=acfModify(detector,pModify);
 
+%% modify detector threshold
+pModify.pNms = struct('thr', 30, 'overlap', 0.15);
+detector = acfModify(detector, pModify);
+
 %% test on sample image
 if ismac
     imgNms = bbGt('getFiles', ...
@@ -65,20 +76,26 @@ if ismac
         '/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Disparity'});
 elseif ispc
     imgNms = bbGt('getFiles', ...
-        {'C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Feature Labels', ...
-        ''});
+        {'C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Positive Gray', ...
+        'C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Positive Disparity'});
 end
 
-for ii = 100:200
+for ii = 141:141
     ImgGray = imread(imgNms{1, ii});
     ImgDisp = imread(imgNms{2, ii});
-    ImgComb = ImgAndDisp2Img(ImgGray, ImgDisp, opts);
+    ImgComb = ImgAndDisp2Img(ImgGray, ImgDisp, opts.pPyramid.pChns.pDisparity);
     bbs = acfDetect(ImgComb, detector);
-    figure(1); 
+    figure(2); 
     im(ImgGray); 
-    bbApply('draw', bbs); 
-    pause(.25);
+    bbApply('draw', bbs);
+    pause(1.0);
 end
+
+%% check disparity image
+
+I = imread('C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Positive Disparity\AUDI-A4YH_20131001_083932_0182 - flip.pgm');
+I = pgmDisparityToPng(I);
+imshow(I);
 %% test detector and plot roc (see acfTest)
 % [~,~,gt,dt]=acfTest('name',opts.name,'imgDir','C:\Users\NSE4CLJ\Desktop\Poles\Feature Labels',...
 %   'gtDir','C:\Users\NSE4CLJ\Desktop\Poles\Feature Labels Annotations','pLoad',...

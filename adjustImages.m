@@ -19,15 +19,15 @@ for ii=1:nfiles
    end
    
    currentImage = imread(filePath);
-   %currentImage = rgb2gray(currentImage);
+   currentImage = rgb2gray(currentImage);
    img = funcImage(currentImage);
    
    %delete(filePath);
    
    if ismac
-        name = strcat(outputDirPath, '/', extractBefore(currentFilename, length(currentFilename) - 4 ), ' - flip.', extensionOutput);
+        name = strcat(outputDirPath, '/', extractBefore(currentFilename, length(currentFilename) - 4 ), '.', extensionOutput);
    elseif ispc
-        name = strcat(outputDirPath, '\', extractBefore(currentFilename, length(currentFilename) - 3 ), ' - flip.', extensionOutput);
+        name = strcat(outputDirPath, '\', extractBefore(currentFilename, length(currentFilename) - 3 ), '.', extensionOutput);
    end
    name = char(name);
    

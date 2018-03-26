@@ -13,14 +13,17 @@ function I = pgmDisparityToPng(img, varargin)
 
     % read pgm file
     img = double(img);
+    
+    for i = 1:size(img, 1)
+        for j = 1:size(img, 2)
+            if bitand(img(i, j, 1), bitor(G_PERIODICAL_FLAG_U16, G_UNIQUENESS_FLAG_U16)) ~= 0
+                %img(i, j, 1) = 0;
+            end
+        end
+    end
 
-    % create depth image from pgm image
-    imgDisparity = bitxor(img, G_PERIODICAL_FLAG_U16);
-    imgDisparity = bitxor(imgDisparity, G_UNIQUENESS_FLAG_U16);
-    imgDisparity = bitand(imgDisparity, G_VALUE_MASK_U16);
-
+    imgDisparity = bitand(img, G_VALUE_MASK_U16);
     imgDisparity = imgDisparity * G_FLOAT_FACTOR;
-
     imgDepth = (M_BASELINE * M_FOCAL_LENGTH) ./ imgDisparity;
 
     % create output image based on depth image(matrix)
