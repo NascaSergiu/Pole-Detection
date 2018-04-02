@@ -49,8 +49,11 @@ if(~multiple)
 else
   n=length(I); 
   bbs=cell(n,1);
+  Img = I(1, :);
+  Disp = I(2, :);
   parfor i=1:n
-      bbs{i}=acfDetectImg(I{i},detector); 
+      %bbs{i}=acfDetectImg(I{i},detector); 
+      bbs{i} = acfDetectImgDisp(Img{i}, Disp{i}, detector);
   end
 end
 
@@ -70,6 +73,20 @@ if( multiple ) % add image index to each bb and flatten result
 end
 dlmwrite(fileName,bbs); bbs=1;
 
+end
+
+function bbs = acfDetectImgDisp( I, Disp, detector)
+
+    Ds=detector; 
+    if(~iscell(Ds))
+        Ds={Ds}; 
+    end;
+    opts=Ds{1}.opts;
+
+    ImgGray = imread(I);
+    ImgDisp = imread(Disp);
+    ImgComb = ImgAndDisp2Img(ImgGray, ImgDisp, opts.pPyramid.pChns.pDisparity);
+    bbs = acfDetectImg(ImgComb, detector);
 end
 
 function bbs = acfDetectImg( I, detector )

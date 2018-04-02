@@ -582,29 +582,64 @@ function [gt0,dt0] = loadAll( gtDir, dtDir, pLoad )
 % get list of files
 if(nargin<2), dtDir=[]; end
 if(nargin<3), pLoad={}; end
-if(isempty(dtDir)), fs=getFiles({gtDir}); gtFs=fs(1,:); else
-  dtFile=length(dtDir)>4 && strcmp(dtDir(end-3:end),'.txt');
-  if(dtFile), dirs={gtDir}; else dirs={gtDir,dtDir}; end
-  fs=getFiles(dirs); gtFs=fs(1,:);
-  if(dtFile), dtFs=dtDir; else dtFs=fs(2,:); end
+if(isempty(dtDir))
+    fs = getFiles({gtDir}); 
+    gtFs = fs(1,:); 
+else
+    dtFile = length(dtDir)>4 && strcmp(dtDir(end-3:end),'.txt');
+  if(dtFile)
+      dirs={gtDir}; 
+  else
+      dirs={gtDir,dtDir};
+  end
+  fs=getFiles(dirs); 
+  gtFs=fs(1,:);
+  if(dtFile)
+      dtFs=dtDir; 
+  else
+      dtFs=fs(2,:); 
+  end
 end
 
 % load ground truth
-persistent keyPrv gtPrv; key={gtDir,pLoad}; n=length(gtFs);
-if(isequal(key,keyPrv)), gt0=gtPrv; else gt0=cell(1,n);
-  for i=1:n, [~,gt0{i}]=bbLoad(gtFs{i},pLoad); end
-  gtPrv=gt0; keyPrv=key;
+persistent keyPrv gtPrv; 
+key={gtDir,pLoad}; 
+n=length(gtFs);
+if(isequal(key,keyPrv))
+    gt0=gtPrv; 
+else
+    gt0=cell(1,n);
+    for i=1:n
+        [~,gt0{i}]=bbLoad(gtFs{i},pLoad);
+    end
+    gtPrv=gt0; keyPrv=key;
 end
 
 % load detections
-if(isempty(dtDir) || nargout<=1), dt0=cell(0); return; end
-if(iscell(dtFs)), dt0=cell(1,n);
-  for i=1:n, dt1=load(dtFs{i},'-ascii');
-    if(numel(dt1)==0), dt1=zeros(0,5); end; dt0{i}=dt1(:,1:5); end
+if(isempty(dtDir) || nargout<=1)
+    dt0=cell(0); 
+    return; 
+end
+if(iscell(dtFs))
+    dt0=cell(1,n);
+    for i=1:n
+        dt1=load(dtFs{i},'-ascii');
+        if(numel(dt1)==0)
+            dt1=zeros(0,5); 
+        end; 
+        dt0{i}=dt1(:,1:5); 
+    end
 else
-  dt1=load(dtFs,'-ascii'); if(numel(dt1)==0), dt1=zeros(0,6); end
-  ids=dt1(:,1); assert(max(ids)<=n);
-  dt0=cell(1,n); for i=1:n, dt0{i}=dt1(ids==i,2:6); end
+  dt1=load(dtFs,'-ascii'); 
+  if(numel(dt1)==0)
+      dt1=zeros(0,6); 
+  end
+  ids=dt1(:,1); 
+  assert(max(ids)<=n);
+  dt0=cell(1,n); 
+  for i=1:n
+      dt0{i}=dt1(ids==i,2:6); 
+  end
 end
 
 end
@@ -656,13 +691,18 @@ function [gt,dt] = evalRes( gt0, dt0, thr, mul )
 % See also bbGt, bbGt>compOas, bbGt>loadAll
 
 % get parameters
-if(nargin<3 || isempty(thr)), thr=.5; end % -----------
+if(nargin<3 || isempty(thr)), thr=.5; end
 if(nargin<4 || isempty(mul)), mul=0; end
 
 % if gt0 and dt0 are cell arrays run on each element in turn
 if( iscell(gt0) && iscell(dt0) ), n=length(gt0);
-  assert(length(dt0)==n); gt=cell(1,n); dt=gt;
-  for i=1:n, [gt{i},dt{i}] = evalRes(gt0{i},dt0{i},thr,mul); end; return;
+  assert(length(dt0)==n); 
+  gt=cell(1,n); 
+  dt=gt;
+  for i=1:n
+      [gt{i},dt{i}] = evalRes(gt0{i},dt0{i},thr,mul); 
+  end; 
+  return;
 end
 
 % check inputs
