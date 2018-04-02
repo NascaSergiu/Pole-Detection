@@ -817,20 +817,47 @@ function [xs,ys,score,ref] = compRoc( gt, dt, roc, ref )
 if(nargin<3 || isempty(roc)), roc=1; end
 if(nargin<4 || isempty(ref)), ref=[]; end
 % convert to single matrix, discard ignore bbs
-nImg=length(gt); assert(length(dt)==nImg);
-gt=cat(1,gt{:}); gt=gt(gt(:,5)~=-1,:);
-dt=cat(1,dt{:}); dt=dt(dt(:,6)~=-1,:);
+nImg=length(gt); 
+assert(length(dt)==nImg);
+gt=cat(1,gt{:}); 
+gt=gt(gt(:,5)~=-1,:);
+dt=cat(1,dt{:}); 
+dt=dt(dt(:,6)~=-1,:);
 % compute results
-if(size(dt,1)==0), xs=0; ys=0; score=0; ref=ref*0; return; end
-m=length(ref); np=size(gt,1); score=dt(:,5); tp=dt(:,6);
-[score,order]=sort(score,'descend'); tp=tp(order);
-fp=double(tp~=1); fp=cumsum(fp); tp=cumsum(tp);
+if(size(dt,1)==0)
+    xs=0; 
+    ys=0; 
+    score=0; 
+    ref=ref*0; 
+    return; 
+end
+m=length(ref); 
+np=size(gt,1); 
+score=dt(:,5); 
+tp=dt(:,6);
+[score,order] = sort(score,'descend'); 
+tp=tp(order);
+fp=double(tp~=1); 
+fp=cumsum(fp); 
+tp=cumsum(tp);
 if( roc )
-  xs=fp/nImg; ys=tp/np; xs1=[-inf; xs]; ys1=[0; ys];
-  for i=1:m, j=find(xs1<=ref(i)); ref(i)=ys1(j(end)); end
+  xs=fp/nImg; 
+  ys=tp/np; 
+  xs1=[-inf; xs]; 
+  ys1=[0; ys];
+  for i=1:m
+      j=find(xs1<=ref(i)); 
+      ref(i)=ys1(j(end)); 
+  end
 else
-  xs=tp/np; ys=tp./(fp+tp); xs1=[xs; inf]; ys1=[ys; 0];
-  for i=1:m, j=find(xs1>=ref(i)); ref(i)=ys1(j(1)); end
+  xs=tp/np; 
+  ys=tp./(fp+tp); 
+  xs1=[xs; inf]; 
+  ys1=[ys; 0];
+  for i=1:m
+      j=find(xs1>=ref(i)); 
+      ref(i)=ys1(j(1)); 
+  end
 end
 end
 
