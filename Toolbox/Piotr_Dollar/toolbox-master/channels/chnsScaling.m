@@ -6,7 +6,7 @@ function [lambdas,as,scales,fs] = chnsScaling( pChns, Is, show )
 % can be used to approximate feature responses at nearby scales. The
 % approximation is accurate at least within an entire scale octave. For
 % details and to understand why this unexpected result holds, please see:
-%   P. Dollár, R. Appel, S. Belongie and P. Perona
+%   P. Doll?r, R. Appel, S. Belongie and P. Perona
 %   "Fast Feature Pyramids for Object Detection", PAMI 2014.
 %
 % This function computes channels at multiple image scales and plots the
@@ -52,25 +52,47 @@ function [lambdas,as,scales,fs] = chnsScaling( pChns, Is, show )
 if(nargin<3 || isempty(show)), show=1; end
 
 % construct pPyramid (don't pad, concat or appoximate)
-pPyramid=chnsPyramid(); pPyramid.pChns=pChns; pPyramid.concat=0;
-pPyramid.pad=[0 0]; pPyramid.nApprox=0; pPyramid.smooth=0;
-pPyramid.minDs(:)=max(8,pChns.shrink*4);
+pPyramid = chnsPyramid();
+pPyramid.pChns = pChns;
+pPyramid.concat = 0;
+pPyramid.pad = [0 0];
+pPyramid.nApprox = 0;
+pPyramid.smooth = 0;
+pPyramid.minDs(:) = max(8,pChns.shrink*4);
 
 % crop all images to smallest image size
-ds=[inf inf]; nImages=numel(Is);
-for i=1:nImages, ds=min(ds,[size(Is{i},1) size(Is{i},2)]); end
-ds=round(ds/pChns.shrink)*pChns.shrink;
-for i=1:nImages, Is{i}=Is{i}(1:ds(1),1:ds(2),:); end
+ds = [inf inf];
+nImages = numel(Is);
+for i = 1:nImages
+    ds = min(ds,[size(Is{i},1) size(Is{i},2)]); 
+end
+ds = round(ds/pChns.shrink)*pChns.shrink;
+for i = 1:nImages
+    Is{i} = Is{i}(1:ds(1),1:ds(2),:); 
+end
 
 % compute fs [nImages x nScales x nTypes] array of feature means
-P=chnsPyramid(Is{1},pPyramid); scales=P.scales'; info=P.info;
-nScales=P.nScales; nTypes=P.nTypes; fs=zeros(nImages,nScales,nTypes);
-parfor i=1:nImages, P=chnsPyramid(Is{i},pPyramid); for j=1:nScales
-    for k=1:nTypes, fs(i,j,k)=mean(P.data{j,k}(:)); end; end; end
+P = chnsPyramid(Is{1},pPyramid); 
+scales = P.scales'; 
+info = P.info;
+nScales = P.nScales; 
+nTypes = P.nTypes; 
+fs = zeros(nImages,nScales,nTypes);
+for i = 1:nImages
+    P = chnsPyramid(Is{i}, pPyramid); 
+    for j = 1:nScales
+        for k = 1:nTypes
+            fs(i,j,k) = mean(P.data{j,k}(:)); 
+        end; 
+    end; 
+end
 
 % remove fs with fs(:,1,:) having small values
-kp=max(fs(:,1,:)); kp=fs(:,1,:)>kp(ones(1,nImages),1,:)/50;
-kp=min(kp,[],3); fs=fs(kp,:,:); nImages=size(fs,1);
+kp=max(fs(:,1,:));
+kp=fs(:,1,:)>kp(ones(1,nImages),1,:)/50;
+kp=min(kp,[],3);
+fs=fs(kp,:,:);
+nImages=size(fs,1);
 
 % compute ratios, intercepts and lambdas using least squares
 scales1=scales(2:end); nScales=nScales-1; O=ones(nScales,1);

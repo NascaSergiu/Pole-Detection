@@ -303,7 +303,9 @@ end
 if(nargout<=1), return; end; if(n==0), bbs=zeros(0,5); return; end
 bbs=double([reshape([objs.bb],4,[]); [objs.ign]]'); ign=bbs(:,5)==1;
 for i=1:n, bbs(i,1:4)=bbExtent(bbs(i,1:4),objs(i).ang,ellipse); end
-if(~isempty(sqr)), bbs(~ign,:)=bbApply('squarify',bbs(~ign,:),sqr{:}); end
+if(~isempty(sqr))
+    bbs(~ign,:)=bbApply('squarify',bbs(~ign,:),sqr{:}); 
+end
 
   function bb = bbExtent( bb, ang, ellipse )
     % get bb that fully contains given oriented bb
@@ -722,19 +724,41 @@ dt=[dt zeros(nd,1)];
 % Attempt to match each (sorted) dt to each (sorted) gt
 oa = compOas( dt(:,1:4), gt(:,1:4), gt(:,5)==-1 );
 for d=1:nd
-  bstOa=thr; bstg=0; bstm=0; % info about best match so far
+  bstOa=thr; 
+  bstg=0; 
+  bstm=0; % info about best match so far
   for g=1:ng
     % if this gt already matched, continue to next gt
-    m=gt(g,5); if( m==1 && ~mul ), continue; end
+    m=gt(g,5); 
+    if( m==1 && ~mul )
+        continue; 
+    end
     % if dt already matched, and on ignore gt, nothing more to do
-    if( bstm~=0 && m==-1 ), break; end
+    if( bstm~=0 && m==-1 )
+        break; 
+    end
     % compute overlap area, continue to next gt unless better match made
-    if(oa(d,g)<bstOa), continue; end
+    if(oa(d,g)<bstOa)
+        continue; 
+    end
     % match successful and best so far, store appropriately
-    bstOa=oa(d,g); bstg=g; if(m==0), bstm=1; else bstm=-1; end
-  end; g=bstg; m=bstm;
+    bstOa=oa(d,g); 
+    bstg=g; 
+    if(m==0)
+        bstm=1; 
+    else
+        bstm=-1; 
+    end
+  end; 
+  g=bstg; 
+  m=bstm;
   % store type of match for both dt and gt
-  if(m==-1), dt(d,6)=m; elseif(m==1), gt(g,5)=m; dt(d,6)=m; end
+  if(m==-1)
+      dt(d,6)=m; 
+  elseif(m==1), 
+      gt(g,5)=m; 
+      dt(d,6)=m; 
+  end
 end
 
 end
@@ -765,24 +789,44 @@ function [hs,hImg] = showRes( I, gt, dt, varargin )
 % EXAMPLE
 %
 % See also bbGt, bbGt>evalRes
-dfs={'evShow',1,'gtShow',1,'dtShow',1,'cols','krg',...
-  'gtLs','-','dtLs','--','lw',3};
+dfs={'evShow', 1, ...
+    'gtShow', 1, ...
+    'dtShow', 1, ...
+    'cols','krg',...
+    'gtLs', '-', ...
+    'dtLs', '--', ...
+    'lw', 3};
 [evShow,gtShow,dtShow,cols,gtLs,dtLs,lw]=getPrmDflt(varargin,dfs,1);
 % optionally display image
-if(ischar(I)), I=imread(I); end
-if(~isempty(I)), hImg=im(I,[],0); title(''); end
+if(ischar(I))
+    I=imread(I); 
+end
+
+if(~isempty(I))
+    hImg=im(I,[],0); 
+    title(''); 
+end
 % display bbs with or w/o color coding based on output of evalRes
-hold on; hs=cell(1,1000); k=0;
+hold on; 
+hs=cell(1,1000); 
+k=0;
 if( evShow )
   if(gtShow), for i=1:size(gt,1), k=k+1;
       hs{k}=bbApply('draw',gt(i,1:4),cols(gt(i,5)+2),lw,gtLs); end; end
   if(dtShow), for i=1:size(dt,1), k=k+1;
       hs{k}=bbApply('draw',dt(i,1:5),cols(dt(i,6)+2),lw,dtLs); end; end
 else
-  if(gtShow), k=k+1; hs{k}=bbApply('draw',gt(:,1:4),cols(3),lw,gtLs); end
-  if(dtShow), k=k+1; hs{k}=bbApply('draw',dt(:,1:5),cols(3),lw,dtLs); end
+  if(gtShow)
+      k=k+1; 
+      hs{k}=bbApply('draw',gt(:,1:4),cols(3),lw,gtLs); 
+  end
+  if(dtShow)
+      k=k+1; 
+      hs{k}=bbApply('draw',dt(:,1:5),cols(3),lw,dtLs); 
+  end
 end
-hs=[hs{:}]; hold off;
+hs=[hs{:}]; 
+hold off;
 end
 
 function [xs,ys,score,ref] = compRoc( gt, dt, roc, ref )
