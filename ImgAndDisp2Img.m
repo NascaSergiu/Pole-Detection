@@ -10,7 +10,7 @@ function imgOut = calculateDepthFromDisparity(IDisp, opts)
 IDisp = double(IDisp);
 for i = 1:size(IDisp, 1)
     for j = 1:size(IDisp, 2)
-        if bitand(IDisp(i, j, 1), bitor(opts.periodicalFlagU16, opts.uniquenessFlagU16)) ~= 0
+        if bitand(IDisp(i, j, 1), bitor(0, opts.uniquenessFlagU16)) ~= 0
             IDisp(i, j, 1) = 0;
         end
     end

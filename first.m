@@ -16,6 +16,7 @@ opts.pBoost.pTree.fracFtrs = 1/16;
 
 opts.pNms.overlap = 0.3;
 opts.pNms.thr = 20;
+opts.pNms.combine = 0.1;
 
 opts.nNeg = 25000; 
 opts.nAccNeg = 50000;
@@ -26,8 +27,10 @@ opts.pPyramid.pChns.pColor.colorSpace = 'gray';
 opts.pPyramid.pChns.pGradHist.softBin = 1; 
 opts.pPyramid.pChns.shrink = 2;
 
+opts.removeAnnotDepth = 0;
+opts.depthThreshold = 65;
 opts.pPyramid.pChns.pDisparity.enabled = 1;
-opts.pPyramid.pChns.pDisparity.maxDepth = 65;
+opts.pPyramid.pChns.pDisparity.maxDepth = 113;
 opts.pPyramid.pChns.pDisparity.periodicalFlagU16 = 8192;
 opts.pPyramid.pChns.pDisparity.uniquenessFlagU16 = 4096;
 opts.pPyramid.pChns.pDisparity.valueMaskU16 = 2047;
@@ -60,7 +63,7 @@ opts.pLoad = [pLoad 'arRng', [-inf inf]];
 detector = acfTrain( opts );
 
 %% modify detector (see acfModify)
-%pModify=struct('cascThr',-1,'cascCal',-.01);
+pModify=struct('cascThr',-1,'cascCal',+.035);
 pModify.pNms = struct('thr', 30, 'overlap', 0.6);
 detector = acfModify(detector, pModify);
 
@@ -68,39 +71,54 @@ detector = acfModify(detector, pModify);
 if ismac
     imgNms = bbGt('getFiles', ...
         {'/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray', ...
-        '/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Disparity'});
+        '/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Disparity', ...
+        '/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Annotations'});
 elseif ispc
     imgNms = bbGt('getFiles', ...
         {'C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Positive Gray', ...
         'C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Positive Disparity'});
 end
 
-for ii = 50:100
+for ii = 43:43
     ImgGray = imread(imgNms{1, ii});
     ImgDisp = imread(imgNms{2, ii});
     ImgComb = ImgAndDisp2Img(ImgGray, ImgDisp, opts.pPyramid.pChns.pDisparity);
-    bbs = acfDetect(ImgComb, detector);
+    
+    dt = acfDetect(ImgComb, detector);
+    [~,gt] = bbGt('bbLoad', imgNms{3, ii}, opts.pLoad);
+    
+    if( opts.removeAnnotDepth )
+        gt = bbGt('preProcessing', gt, ImgComb, opts);
+    end
+    
+    gtValid = gt(gt(:,5)==0,1:4);
+    gtNValid = gt(gt(:,5)==1,1:4);
+    
     figure(2); 
     im(ImgGray); 
-    bbApply('draw', bbs);
-    pause(0.3);
+    
+    bbApply( 'draw', dt);
+    bbApply( 'draw', gtNValid, 'r');
+    bbApply( 'draw', gtValid, 'b');
+    
+    pause(1.5);
 end
 
 %% check disparity image
 
-ImgGray = imread('/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray/BK63XRG_20141011_174517_0282 - flip.bmp');
-ImgDisp = imread('/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Disparity/BK63XRG_20141011_174517_0282 - flip.pgm');
+ImgGray = imread('/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray/AUDI-A4YH_20131001_083932_2682 - flip.bmp');
+ImgDisp = imread('/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Disparity/AUDI-A4YH_20131001_083932_2682 - flip.pgm');
 ImgComb = ImgAndDisp2Img(ImgGray, ImgDisp, opts.pPyramid.pChns.pDisparity);
 ImgDisp = ImgComb(:,:,2);
 Img = imfuse(ImgGray, ImgDisp, 'blend');
-figure(1);
+figure(10);
 imshow(Img);
-figure(2);
+figure(20);
 imshow(ImgDisp);
 
 %% test detector and plot roc (see acfTest)
-pModify = struct('cascThr', -1,'cascCal', .025);
-pModify.pNms = struct('thr', 30, 'overlap', 0.15);
+pModify=struct('cascThr',-1,'cascCal',+.035);
+pModify.pNms = struct('thr', 30, 'overlap', 0.6);
 if ismac
     [~,~,gt,dt]=acfTest('name',opts.name, ...
         'imgDir','/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray', ...
@@ -108,10 +126,10 @@ if ismac
         'gtDir','/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Annotations', ...
         'pLoad',[pLoad, ...
         'arRng', [-inf inf]], ...
-        'reapply', 1, ...
-        'thr', .3, ...
+        'reapply', 0, ...
+        'thr', .15, ...
         'pModify', pModify, ...
-        'show',2);
+        'show', 2);
 elseif ispc
     [~,~,gt,dt]=acfTest('name',opts.name, ...
         'imgDir', 'C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Positive Gray', ...
@@ -119,8 +137,8 @@ elseif ispc
         'gtDir','C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Annotations', ...
         'pLoad', [pLoad, ...
         'arRng', [-inf inf]], ...
-        'reapply', 1, ...
-        'thr', .3, ...
+        'reapply', 0, ...
+        'thr', .15, ...
         'pModify', pModify, ...
         'show', 2);
 end

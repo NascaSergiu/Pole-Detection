@@ -594,7 +594,7 @@ else
   else
       dirs={gtDir,dtDir};
   end
-  fs=getFiles(dirs); 
+  fs=getFiles(dirs, 2); 
   gtFs=fs(1,:);
   if(dtFile)
       dtFs=dtDir; 
@@ -763,6 +763,88 @@ end
 
 end
 
+function [gt,dt] = evalRes2( gt0, dt0, thr, mul )
+
+% get parameters
+if(nargin<3 || isempty(thr)), thr=.5; end
+if(nargin<4 || isempty(mul)), mul=0; end
+
+% if gt0 and dt0 are cell arrays run on each element in turn
+if( iscell(gt0) && iscell(dt0) ), n=length(gt0);
+  assert(length(dt0)==n); 
+  gt=cell(1,n); 
+  dt=gt;
+  for i=1:n
+      [gt{i},dt{i}] = evalRes2(gt0{i},dt0{i},thr,mul);
+  end; 
+  return;
+end
+
+% check inputs
+if(isempty(gt0))
+    gt0=zeros(0,6); 
+end
+if(isempty(dt0))
+    dt0=zeros(0,5); 
+end
+assert( size(dt0,2)==5 ); 
+nd=size(dt0,1);
+assert( size(gt0,2)==6 ); 
+ng=size(gt0,1);
+
+% sort dt highest score first, sort gt ignore last
+[~,ord]=sort(dt0(:,5),'descend'); 
+dt0=dt0(ord,:);
+[~,ord]=sort(gt0(:,5),'ascend'); 
+gt0=gt0(ord,:);
+
+gt=gt0;
+%gt(:,5)=-gt(:,5); 
+dt=dt0;
+dt=[dt zeros(nd,1)];
+
+% Attempt to match each (sorted) dt to each (sorted) gt
+oa = compOas( dt(:,1:4), gt(:,1:4), gt(:,5)==-1 );
+for d=1:nd
+  bstOa=thr; 
+  bstg=0; 
+  bstm=0; % info about best match so far
+  for g=1:ng
+    % if this gt already matched, continue to next gt
+    m=gt(g,6); 
+    if( m==1 && ~mul )
+        continue; 
+    end
+    % if dt already matched, and on ignore gt, nothing more to do
+    if( bstm~=0 && m==-1 )
+        break; 
+    end
+    % compute overlap area, continue to next gt unless better match made
+    if(oa(d,g)<bstOa)
+        continue; 
+    end
+    % match successful and best so far, store appropriately
+    bstOa=oa(d,g); 
+    bstg=g; 
+    if(m==0)
+        bstm=1; 
+    else
+        bstm=-1; 
+    end
+  end; 
+  g=bstg; 
+  m=bstm;
+  % store type of match for both dt and gt
+  if(m==-1)
+      dt(d,6)=m; 
+  elseif(m==1), 
+      gt(g,6)=m; 
+      dt(d,6)=m; 
+  end
+end
+
+end
+
 function [hs,hImg] = showRes( I, gt, dt, varargin )
 % Display evaluation results for given image.
 %
@@ -905,6 +987,30 @@ else
 end
 end
 
+function [xs, ys, ref] = compRoc2( gt, dt)
+xs = zeros(1, size(dt, 2));
+ys = zeros(1, size(dt, 2));
+ref = zeros(1, size(dt, 2));
+
+tp = 0;
+fp = 0;
+miss = 0;
+for i = 1:size(dt, 2)
+    bbsDt = dt{i};
+    bbsGt = gt{i};
+    
+    tp = tp + size(bbsDt(bbsDt(:,6)==1, :), 1);
+    fp = fp + size(bbsDt(bbsDt(:,6)==0, :), 1);
+    bbsGt = bbsGt(bbsGt(:,5) == 0, 1:6);
+    bbsGt = bbsGt(bbsGt(:,6) == 0, 1:6);
+    miss = miss + size(bbsGt, 1);
+    
+    xs(i) = fp;
+    ys(i) = tp;
+    ref(i) = miss;
+end
+end
+
 function [Is,scores,imgIds] = cropRes( gt, dt, imFs, varargin )
 % Extract true or false positives or negatives for visualization.
 %
@@ -1044,4 +1150,26 @@ function oa = compOa( dt, gt, ig )
 w=min(dt(3)+dt(1),gt(3)+gt(1))-max(dt(1),gt(1)); if(w<=0),oa=0; return; end
 h=min(dt(4)+dt(2),gt(4)+gt(2))-max(dt(2),gt(2)); if(h<=0),oa=0; return; end
 i=w*h; if(ig),u=dt(3)*dt(4); else u=dt(3)*dt(4)+gt(3)*gt(4)-i; end; oa=i/u;
+end
+
+function gt = preProcessing(gt, img, opts)
+
+    imageDepth = size(img, 3);
+    multiFactor = 255.0 / opts.pPyramid.pChns.pDisparity.maxDepth;
+    maxDepthValue = opts.depthThreshold * multiFactor;
+    for i = 1:size(gt, 1)
+        sumPixel = 0;
+        for x = int16(gt(i, 2)):int16((gt(i, 2) + gt(i, 4)))
+            for y = int16(gt(i, 1)):int16(gt(i, 1) + gt(i, 3))
+                if( img( x, y, imageDepth ) <= maxDepthValue )
+                    sumPixel = sumPixel + 1;
+                end
+            end
+        end
+        nrPixeli = (int16(gt(i, 3)) + 1) * (int16(gt(i, 4)) + 1);
+        if( sumPixel < 30.0 / 100.0 * nrPixeli )
+            gt(i, 5) = 1;
+        end
+    end
+    
 end

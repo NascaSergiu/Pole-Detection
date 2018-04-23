@@ -111,7 +111,9 @@ end
 P=chnsPyramid(I,pPyramid); 
 bbs=cell(P.nScales,nDs);
 if(isfield(opts,'filters') && ~isempty(opts.filters)), shrink=shrink*2;
-  for i=1:P.nScales, fs=opts.filters; C=repmat(P.data{i},[1 1 size(fs,4)]);
+  for i=1:P.nScales
+    fs=opts.filters; 
+    C=repmat(P.data{i},[1 1 size(fs,4)]);
     for j=1:size(C,3)
         C(:,:,j)=conv2(C(:,:,j),fs(:,:,j),'same'); 
     end
@@ -121,7 +123,8 @@ end
 % apply sliding window classifiers
 for i=1:P.nScales
   for j=1:nDs, opts=Ds{j}.opts;
-    modelDsPad=opts.modelDsPad; modelDs=opts.modelDs;
+    modelDsPad=opts.modelDsPad; 
+    modelDs=opts.modelDs;
     bb = acfDetect1(P.data{i},Ds{j}.clf,shrink,...
       modelDsPad(1),modelDsPad(2),opts.stride,opts.cascThr);
     shift=(modelDsPad-modelDs)/2-pad;
@@ -129,8 +132,14 @@ for i=1:P.nScales
     bb(:,2)=(bb(:,2)+shift(1))/P.scaleshw(i,1);
     bb(:,3)=modelDs(2)/P.scales(i);
     bb(:,4)=modelDs(1)/P.scales(i);
-    if(separate), bb(:,6)=j; end; bbs{i,j}=bb;
+    if(separate)
+        bb(:,6)=j; 
+    end; 
+    bbs{i,j}=bb;
   end
-end; bbs=cat(1,bbs{:});
-if(~isempty(pNms)), bbs=bbNms(bbs,pNms); end
+end; 
+bbs=cat(1,bbs{:});
+if(~isempty(pNms))
+    bbs=bbNms(bbs,pNms); 
+end
 end

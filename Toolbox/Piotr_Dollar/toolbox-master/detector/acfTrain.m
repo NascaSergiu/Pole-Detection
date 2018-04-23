@@ -132,14 +132,20 @@ for stage = 0:numel(opts.nWeak)-1
     fprintf('Training stage %i\n',stage); startStage=clock;
     
     % sample positives and compute info about channels
-    if( stage==0 )
+    if( stage == 0 )
         [Is1,IsOrig1] = sampleWins( detector, stage, 1 );
-        t=ndims(Is1); if(t==3), t=Is1(:,:,1); else t=Is1(:,:,:,1); end
-        t=chnsCompute(t,opts.pPyramid.pChns); detector.info=t.info;
+        t = ndims(Is1); 
+        if(t == 3)
+            t = Is1(:,:,1); 
+        else
+            t = Is1(:,:,:,1);
+        end
+        t = chnsCompute(t,opts.pPyramid.pChns); 
+        detector.info = t.info;
     end
     
     % compute local decorrelation filters
-    if( stage==0 && length(opts.filters)==2 )
+    if( stage == 0 && length(opts.filters) == 2 )
         fs = opts.filters; opts.filters = [];
         X1 = chnsCompute1( IsOrig1, opts );
         fs = chnsCorrelation( X1, fs(1), fs(2) );
@@ -147,7 +153,7 @@ for stage = 0:numel(opts.nWeak)-1
     end
     
     % compute lambdas
-    if( stage==0 && isempty(opts.pPyramid.lambdas) )
+    if( stage == 0 && isempty(opts.pPyramid.lambdas) )
         fprintf('Computing lambdas... '); start=clock;
         ds=size(IsOrig1); ds(1:end-1)=1; IsOrig1=mat2cell2(IsOrig1,ds);
         ls=chnsScaling(opts.pPyramid.pChns,IsOrig1,0);
@@ -156,7 +162,7 @@ for stage = 0:numel(opts.nWeak)-1
     end
     
     % compute features for positives
-    if( stage==0 )
+    if( stage == 0 )
         X1 = chnsCompute1( Is1, opts );
         X1 = reshape(X1,[],size(X1,4))';
         clear Is1 IsOrig1 ls fs ds t;
@@ -168,9 +174,12 @@ for stage = 0:numel(opts.nWeak)-1
     X0 = reshape(X0,[],size(X0,4))';
     
     % accumulate negatives from previous stages
-    if( stage>0 )
-        n0=size(X0p,1); n1=max(opts.nNeg,opts.nAccNeg)-size(X0,1);
-        if(n0>n1 && n1>0), X0p=X0p(randSample(n0,n1),:); end
+    if( stage > 0 )
+        n0=size(X0p,1); 
+        n1=max(opts.nNeg,opts.nAccNeg)-size(X0,1);
+        if(n0>n1 && n1>0)
+            X0p=X0p(randSample(n0,n1),:); 
+        end
         if(n0>0 && n1>0), X0=[X0p; X0]; end %#ok<AGROW>
     end; X0p=X0;
     
@@ -196,58 +205,73 @@ end
 
 function opts = initializeOpts( varargin )
 % Initialize opts struct.
-dfs= {
-    'pPyramid',{}, ...
-    'filters',[], ...
-    'modelDs',[100 41], ...
-    'modelDsPad',[128 64], ...
-    'pNms',struct(), ...
-    'stride',4, ...
-    'cascThr',-1, ...
-    'cascCal',.005, ...
-    'nWeak',128, ...
+dfs = {
+    'pPyramid', {}, ...
+    'filters', [], ...
+    'modelDs', [100 41], ...
+    'modelDsPad', [128 64], ...
+    'pNms', struct(), ...
+    'stride', 4, ...
+    'cascThr', -1, ...
+    'cascCal', .005, ...
+    'nWeak', 128, ...
     'pBoost', {}, ...
-    'seed',0, ...
-    'name','', ...
-    'posGtDir','', ...
-    'posImgDir','', ...
-    'negImgDir','', ...
+    'seed', 0, ...
+    'name', '', ...
+    'posGtDir', '', ...
+    'posImgDir', '', ...
+    'negImgDir', '', ...
     'dispPgmDir', '', ...
     'dispParam', {}, ...
-    'posWinDir','', ...
-    'negWinDir','', ...
-    'imreadf',@imread, ...
-    'imreadp',{}, ...
-    'pLoad',{}, ...
-    'nPos',inf, ...
-    'nNeg',5000, ...
-    'nPerNeg',25, ...
-    'nAccNeg',10000, ...
-    'pJitter',{}, ...
-    'winsSave',0
+    'posWinDir', '', ...
+    'negWinDir', '', ...
+    'imreadf', @imread, ...
+    'imreadp', {}, ...
+    'pLoad', {}, ...
+    'nPos', inf, ...
+    'nNeg', 5000, ...
+    'nPerNeg', 25, ...
+    'nAccNeg', 10000, ...
+    'pJitter', {}, ...
+    'winsSave', 0, ...
+    'removeAnnotDepth', 0, ...
+    'depthThreshold', 65
     };
 opts = getPrmDflt(varargin,dfs,1);
 % fill in remaining parameters
-p=chnsPyramid([],opts.pPyramid);
-p=p.pPyramid;
-p.minDs=opts.modelDs;
-shrink=p.pChns.shrink;
-opts.modelDsPad=ceil(opts.modelDsPad/shrink)*shrink;
-p.pad=ceil((opts.modelDsPad-opts.modelDs)/shrink/2)*shrink;
-p=chnsPyramid([],p);
-p=p.pPyramid;
-p.complete=1;
-p.pChns.complete=1;
-opts.pPyramid=p;
+p = chnsPyramid([],opts.pPyramid);
+p = p.pPyramid;
+p.minDs = opts.modelDs;
+shrink = p.pChns.shrink;
+opts.modelDsPad = ceil(opts.modelDsPad/shrink)*shrink;
+p.pad = ceil((opts.modelDsPad-opts.modelDs)/shrink/2)*shrink;
+p = chnsPyramid([],p);
+p = p.pPyramid;
+p.complete = 1;
+p.pChns.complete = 1;
+opts.pPyramid = p;
 % initialize pNms, pBoost, pBoost.pTree, and pLoad
-dfs={ 'type','maxg', 'overlap',.65, 'ovrDnm','min' };
-opts.pNms=getPrmDflt(opts.pNms,dfs,-1);
-dfs={ 'pTree',{}, 'nWeak',0, 'discrete',1, 'verbose',16 };
-opts.pBoost=getPrmDflt(opts.pBoost,dfs,1);
-dfs={'nBins',256,'maxDepth',2,'minWeight',.01,'fracFtrs',1,'nThreads',16};
-opts.pBoost.pTree=getPrmDflt(opts.pBoost.pTree,dfs,1);
-opts.pLoad=getPrmDflt(opts.pLoad,{'squarify',{0,1}},-1);
-opts.pLoad.squarify{2}=opts.modelDs(2)/opts.modelDs(1);
+dfs={ 'type', 'maxg', ...
+    'overlap', .65, ...
+    'ovrDnm','min' };
+opts.pNms = getPrmDflt(opts.pNms,dfs,-1);
+
+dfs={ 'pTree', {}, ...
+    'nWeak', 0, ...
+    'discrete', 1, ...
+    'verbose',16 };
+opts.pBoost = getPrmDflt(opts.pBoost,dfs,1);
+
+dfs={ 'nBins', 256, ...
+    'maxDepth', 2, ...
+    'minWeight', .01, ...
+    'fracFtrs', 1, ...
+    'nThreads', 16};
+opts.pBoost.pTree = getPrmDflt(opts.pBoost.pTree,dfs,1);
+
+opts.pLoad = getPrmDflt(opts.pLoad,{'squarify',{0,1}},-1);
+
+opts.pLoad.squarify{2} = opts.modelDs(2)/opts.modelDs(1);
 end
 
 function [Is,IsOrig] = sampleWins( detector, stage, positive )
@@ -296,7 +320,8 @@ else
         fs={opts.posImgDir, opts.posGtDir, opts.dispPgmDir};
     end
     
-    fs=bbGt('getFiles',fs);
+    fs = bbGt('getFiles',fs);
+    
     nImg=size(fs,2);
     assert(nImg>0);
     if(~isinf(n))
@@ -305,47 +330,52 @@ else
     Is=cell(nImg*1000,1);
     diary('off');
     tid=ticStatus('Sampling windows',1,30);
-    k=0;
-    i=0;
+    k = 0;
+    i = 0;
     batch=64;
-    while( i<nImg && k<n )
-        batch=min(batch,nImg-i);
-        Is1=cell(1,batch);
-        parfor j=1:batch, ij=i+j;
+    while( i < nImg && k < n )
+        batch = min( batch, nImg - i );
+        Is1 = cell( 1, batch );
+        parfor j = 1:batch, ij = i+j;
             I = feval(opts.imreadf,fs{1,ij},opts.imreadp{:}); %#ok<PFBNS>
             IDisp = feval(opts.imreadf,fs{3,ij},opts.imreadp{:});
             
             I = ImgAndDisp2Img(I, IDisp, opts.pPyramid.pChns.pDisparity);
             
-            gt=[];
+            gt = [];
             if(hasGt)
-                [~,gt]=bbGt('bbLoad',fs{2,ij},opts.pLoad);
+                [~,gt] = bbGt('bbLoad', fs{2,ij}, opts.pLoad);
             end
+            
+            if( opts.removeAnnotDepth )
+                gt = bbGt('preProcessing', gt, I, opts);
+            end
+            
             Is1{j} = sampleWins1( I, gt, detector, stage, positive );
         end
-        Is1=[Is1{:}];
-        k1=length(Is1);
-        Is(k+1:k+k1)=Is1;
-        k=k+k1;
-        if(k>n)
-            Is=Is(randSample(k,n));
-            k=n;
+        Is1 = [Is1{:}];
+        k1 = length(Is1);
+        Is(k+1:k+k1) = Is1;
+        k = k+k1;
+        if(k > n)
+            Is = Is(randSample(k,n));
+            k = n;
         end
-        i=i+batch;
-        tocStatus(tid,max(i/nImg,k/n));
+        i = i + batch;
+        tocStatus( tid, max( i/nImg, k/n) );
     end
-    Is=Is(1:k);
+    Is = Is(1:k);
     diary('on');
     fprintf('Sampled %i windows from %i images.\n',k,i);
 end
 % optionally jitter positive windows
-if(length(Is)<2)
-    Is={};
+if(length(Is) < 2)
+    Is = {};
     return;
 end
-nd=ndims(Is{1})+1;
-Is=cat(nd,Is{:});
-IsOrig=Is;
+nd = ndims(Is{1})+1;
+Is = cat(nd,Is{:});
+IsOrig = Is;
 
 if( positive && isstruct(opts.pJitter) )
     opts.pJitter.hasChn=(nd==4);
@@ -377,51 +407,52 @@ end
 
 function Is = sampleWins1( I, gt, detector, stage, positive )
 % Sample windows from I given its ground truth gt.
-opts=detector.opts;
-shrink=opts.pPyramid.pChns.shrink;
-modelDs=opts.modelDs;
-modelDsPad=opts.modelDsPad;
+opts = detector.opts;
+shrink = opts.pPyramid.pChns.shrink;
+modelDs = opts.modelDs;
+modelDsPad = opts.modelDsPad;
 if( positive )
-    bbs=gt; bbs=bbs(bbs(:,5)==0,:);
+    bbs = gt; 
+    bbs = bbs(bbs(:,5)==0,:);
 else
-    if( stage==0 )
+    if( stage == 0 )
         % generate candidate bounding boxes in a grid
-        [h,w,~]=size(I);
-        h1=modelDs(1);
-        w1=modelDs(2);
-        n=opts.nPerNeg;
-        ny=sqrt(n*h/w);
-        nx=n/ny;
-        ny=ceil(ny);
-        nx=ceil(nx);
-        [xs,ys]=meshgrid(linspace(1,w-w1,nx),linspace(1,h-h1,ny));
-        bbs=[xs(:) ys(:)];
-        bbs(:,3)=w1;
-        bbs(:,4)=h1;
-        bbs=bbs(1:n,:);
+        [h,w,~] = size(I);
+        h1 = modelDs(1);
+        w1 = modelDs(2);
+        n = opts.nPerNeg;
+        ny = sqrt(n*h/w);
+        nx = n/ny;
+        ny = ceil(ny);
+        nx = ceil(nx);
+        [xs,ys] = meshgrid(linspace(1,w-w1,nx),linspace(1,h-h1,ny));
+        bbs = [xs(:) ys(:)];
+        bbs(:,3) = w1;
+        bbs(:,4) = h1;
+        bbs = bbs(1:n,:);
     else
         % run detector to generate candidate bounding boxes
-        bbs=acfDetect(I,detector);
-        [~,ord]=sort(bbs(:,5),'descend');
-        bbs=bbs(ord(1:min(end,opts.nPerNeg)),1:4);
+        bbs = acfDetect( I, detector );
+        [~,ord] = sort(bbs(:,5),'descend');
+        bbs = bbs(ord(1:min(end,opts.nPerNeg)),1:4);
     end
     if( ~isempty(gt) )
         % discard any candidate negative bb that matches the gt
-        n=size(bbs,1);
-        keep=false(1,n);
-        for i=1:n
-            keep(i)=all(bbGt('compOas',bbs(i,:),gt,gt(:,5))<.1);
+        n = size(bbs,1);
+        keep = false(1,n);
+        for i = 1:n
+            keep(i) = all(bbGt('compOas',bbs(i,:),gt,gt(:,5))<.1);
         end
-        bbs=bbs(keep,:);
+        bbs = bbs(keep,:);
     end
 end
 % grow bbs to a large padded size and finally crop windows
-modelDsBig=max(8*shrink,modelDsPad)+max(2,ceil(64/shrink))*shrink;
-r=modelDs(2)/modelDs(1);
+modelDsBig = max(8*shrink,modelDsPad)+max(2,ceil(64/shrink))*shrink;
+r = modelDs(2)/modelDs(1);
 assert(all(abs(bbs(:,3)./bbs(:,4)-r)<1e-5));
-r=modelDsBig./modelDs;
-bbs=bbApply('resize',bbs,r(1),r(2));
-Is=bbApply('crop',I,bbs,'replicate',modelDsBig([2 1]));
+r = modelDsBig./modelDs;
+bbs = bbApply('resize',bbs,r(1),r(2));
+Is = bbApply('crop',I,bbs,'replicate',modelDsBig([2 1]));
 end
 
 function chns = chnsCompute1( Is, opts )

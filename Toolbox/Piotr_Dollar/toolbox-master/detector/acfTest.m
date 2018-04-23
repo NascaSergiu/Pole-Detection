@@ -50,20 +50,71 @@ dfs={ 'name', 'REQ', ...
 
 % run detector on directory of images
 bbsNm=[name 'Dets.txt'];
+detector = load([name 'Detector.mat']);
 if(reapply && exist(bbsNm,'file')), delete(bbsNm); end
 if(reapply || ~exist(bbsNm,'file'))
-  detector = load([name 'Detector.mat']);
-  detector = detector.detector;
-  if(~isempty(pModify)), detector=acfModify(detector,pModify); end
-  imgNms = bbGt('getFiles',{imgDir, dispDir});
-  acfDetect( imgNms, detector, bbsNm );
+    detector = detector.detector;
+    if(~isempty(pModify))
+        detector=acfModify(detector,pModify); 
+    end
+    imgNms = bbGt('getFiles', {imgDir, dispDir});
+    acfDetect( imgNms, detector, bbsNm );
+else
+    imgNms = bbGt('getFiles', {imgDir, dispDir});
+    detector = detector.detector;
 end
 
 % run evaluation using bbGt
 [gt, dt] = bbGt('loadAll', gtDir, bbsNm, pLoad);
-[gt, dt] = bbGt('evalRes', gt, dt, thr, mul);
+
+opts = detector.opts;
+if( opts.removeAnnotDepth )
+    parfor i = 1:size(imgNms, 2)
+        
+        I = feval( opts.imreadf, imgNms{1, i}, opts.imreadp{:} ); %#ok<PFBNS>
+        IDisp = feval( opts.imreadf, imgNms{2, i}, opts.imreadp{:} );
+
+        I = ImgAndDisp2Img( I, IDisp, opts.pPyramid.pChns.pDisparity );
+
+        gt{i} = bbGt( 'preProcessing', gt{i}, I, opts );
+        bbs = gt{i};
+        %bbs = bbs(bbs(:,5)==0,:);
+        bbs(:, 6) = 0;
+        gt{i} = bbs;
+        
+    end
+end
+
+[gt, dt] = bbGt('evalRes2', gt, dt, thr, mul);
+
+[fp, tp, miss] = bbGt('compRoc2', gt, dt);
+
+if( ~show )
+    return;
+end
+
+figure(show + 1);
+hold on;
+
+title('Graph of TP, FP and miss of poles detection');
+xlabel('Number of images');
+ylabel('Number of poles');
+
+plot(fp, 'r');
+plot(tp, 'b');
+plot(miss, 'g');
+legend({'false positive', 'true positive', 'miss'}, 'Location', 'northwest');
+
+%savefig([name 'Roc - '], show + 1, 'png');
+
+hold off;
+
+
+
+
 [fp, tp, score, miss] = bbGt('compRoc', gt, dt, 1, ref);
-miss=exp(mean(log(max(1e-10,1-miss)))); roc=[score fp tp];
+miss=exp(mean(log(max(1e-10,1-miss)))); 
+roc=[score fp tp];
 
 % optionally plot roc
 if( ~show )

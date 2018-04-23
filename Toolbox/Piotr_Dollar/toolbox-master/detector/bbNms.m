@@ -70,30 +70,66 @@ function bbs = bbNms( bbs, varargin )
 % Licensed under the Simplified BSD License [see external/bsd.txt]
 
 % get parameters
-dfs={'type','max','thr',[],'maxn',inf,'radii',[.15 .15 1 1],...
-  'overlap',.5,'ovrDnm','union','resize',{},'separate',0};
-[type,thr,maxn,radii,overlap,ovrDnm,resize,separate] = ...
-  getPrmDflt(varargin,dfs,1);
-if(isempty(thr)), if(strcmp(type,'ms')), thr=0; else thr=-inf; end; end
-if(strcmp(ovrDnm,'union')), ovrDnm=1; elseif(strcmp(ovrDnm,'min')),
-  ovrDnm=0; else assert(false); end
-assert(maxn>=2); assert(numel(overlap)==1);
+dfs = { 'type', 'max', ...
+    'thr', [], ...
+    'maxn', inf, ...
+    'radii', [.15 .15 1 1],...
+    'overlap', .5, ...
+    'ovrDnm', 'union', ...
+    'resize', {}, ...
+    'separate', 0, ...
+    'combine', 0.0};
+[type,thr,maxn,radii,overlap,ovrDnm,resize,separate,combine] = getPrmDflt(varargin,dfs,1);
+if(isempty(thr))
+    if(strcmp(type,'ms'))
+        thr=0; 
+    else
+        thr=-inf; 
+    end; 
+end
+if(strcmp(ovrDnm,'union'))
+    ovrDnm=1; 
+elseif(strcmp(ovrDnm,'min')),
+  ovrDnm=0; 
+else
+    assert(false); 
+end
+assert(maxn>=2); 
+assert(numel(overlap)==1);
 
 % discard bbs below threshold and run nms1
-if(isempty(bbs)), bbs=zeros(0,5); end; if(strcmp(type,'none')), return; end
-kp=bbs(:,5)>thr; bbs=bbs(kp,:); if(isempty(bbs)), return; end
-if(~isempty(resize)), bbs=bbApply('resize',bbs,resize{:}); end
+if(isempty(bbs))
+    bbs=zeros(0,5); 
+end; 
+if(strcmp(type,'none'))
+    return; 
+end
+kp=bbs(:,5)>thr; 
+bbs=bbs(kp,:); 
+if(isempty(bbs))
+    return; 
+end
+if(~isempty(resize))
+    bbs=bbApply('resize',bbs,resize{:}); 
+end
 pNms1={type,thr,maxn,radii,overlap,0};
-if(~separate || size(bbs,2)<6), bbs=nms1(bbs,pNms1{:}); else
-  ts=unique(bbs(:,6)); m=length(ts); bbs1=cell(1,m);
-  for t=1:m, bbs1{t}=nms1(bbs(bbs(:,6)==ts(t),:),pNms1{:}); end
+if(~separate || size(bbs,2)<6)
+    bbs=nms1(bbs,pNms1{:}); 
+else
+  ts=unique(bbs(:,6)); 
+  m=length(ts); 
+  bbs1=cell(1,m);
+  for t=1:m
+      bbs1{t}=nms1(bbs(bbs(:,6)==ts(t),:),pNms1{:}); 
+  end
   bbs=cat(1,bbs1{:});
 end
 
   function bbs = nms1( bbs, type, thr, maxn, radii, overlap, isy )
     % if big split in two, recurse, merge, then run on merged
     if( size(bbs,1)>maxn )
-      n2=floor(size(bbs,1)/2); [~,ord]=sort(bbs(:,1+isy)+bbs(:,3+isy)/2);
+      n2=floor(size(bbs,1)/2); 
+      [~,ord]=sort(bbs(:,1+isy)+bbs(:,3+isy)/2);
       bbs0=nms1(bbs(ord(1:n2),:),type,thr,maxn,radii,overlap,~isy);
       bbs1=nms1(bbs(ord(n2+1:end),:),type,thr,maxn,radii,overlap,~isy);
       bbs=[bbs0; bbs1];
@@ -110,18 +146,56 @@ end
 
   function bbs = nmsMax( bbs, overlap, greedy, ovrDnm )
     % for each i suppress all j st j>i and area-overlap>overlap
-    [~,ord]=sort(bbs(:,5),'descend'); bbs=bbs(ord,:);
-    n=size(bbs,1); kp=true(1,n); as=bbs(:,3).*bbs(:,4);
-    xs=bbs(:,1); xe=bbs(:,1)+bbs(:,3); ys=bbs(:,2); ye=bbs(:,2)+bbs(:,4);
-    for i=1:n, if(greedy && ~kp(i)), continue; end
-      for j=(i+1):n, if(kp(j)==0), continue; end
-        iw=min(xe(i),xe(j))-max(xs(i),xs(j)); if(iw<=0), continue; end
-        ih=min(ye(i),ye(j))-max(ys(i),ys(j)); if(ih<=0), continue; end
-        o=iw*ih; if(ovrDnm), u=as(i)+as(j)-o; else u=min(as(i),as(j)); end
-        o=o/u; if(o>overlap), kp(j)=0; end
-      end
+    [~,ord]=sort(bbs(:,5),'descend'); 
+    bbs=bbs(ord,:);
+    n=size(bbs,1); 
+    kp=true(1,n); 
+    as=bbs(:,3).*bbs(:,4);
+    xs=bbs(:,1); 
+    xe=bbs(:,1)+bbs(:,3); 
+    ys=bbs(:,2); 
+    ye=bbs(:,2)+bbs(:,4);
+    for i=1:n
+        if(greedy && ~kp(i))
+            continue; 
+        end
+        for j=(i+1):n
+            if(kp(j)==0)
+                continue; 
+            end
+            iw = min(xe(i),xe(j)) - max(xs(i),xs(j)); 
+            if(iw <= 0)
+                continue; 
+            end
+            
+            ih = min(ye(i),ye(j)) - max(ys(i),ys(j)); 
+            if(ih <= 0)
+                continue; 
+            end
+            
+            o = iw * ih; 
+            if(ovrDnm)
+                u = as(i) + as(j) - o; 
+            else
+                u = min(as(i),as(j));
+            end
+            
+            o = o/u; 
+            if(o > overlap)
+                kp(j) = 0; 
+            end
+            
+            %combine = 1;
+            if(o > combine)
+                bbs(i, 1) = min(bbs(i, 1), bbs(j, 1));
+                bbs(i, 2) = min(bbs(i, 2), bbs(j, 2));
+                bbs(i, 3) = max(bbs(i, 3), bbs(j, 3));
+                bbs(i, 4) = max(bbs(i, 4), bbs(j, 4));
+                kp(j) = 0;
+            end
+        end
     end
-    bbs=bbs(kp>0,:);
+    bbs = bbs(kp>0,:);
   end
 
   function bbs = nmsMs( bbs, thr, radii )

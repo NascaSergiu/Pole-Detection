@@ -114,20 +114,40 @@ function pyramid = chnsPyramid( I, varargin )
 % get default parameters pPyramid
 if(nargin==2), p=varargin{1}; else p=[]; end
 if( ~isfield(p,'complete') || p.complete~=1 || isempty(I) )
-  dfs={ 'pChns',{}, 'nPerOct',8, 'nOctUp',0, 'nApprox',-1, ...
-    'lambdas',[], 'pad',[0 0], 'minDs',[16 16], ...
-    'smooth',1, 'concat',1, 'complete',1 };
-  p=getPrmDflt(varargin,dfs,1); chns=chnsCompute([],p.pChns);
-  p.pChns=chns.pChns; p.pChns.complete=1; shrink=p.pChns.shrink;
-  p.pad=round(p.pad/shrink)*shrink; p.minDs=max(p.minDs,shrink*4);
-  if(p.nApprox<0), p.nApprox=p.nPerOct-1; end
+  dfs={ 'pChns', {}, ... 
+      'nPerOct', 8, ...
+      'nOctUp', 0, ...
+      'nApprox', -1, ...
+      'lambdas', [], ...
+      'pad', [0 0], ...
+      'minDs', [16 16], ...
+      'smooth', 1, ...
+      'concat', 1, ...
+      'complete', 1 };
+  p=getPrmDflt(varargin,dfs,1); 
+  chns=chnsCompute([],p.pChns);
+  p.pChns=chns.pChns; 
+  p.pChns.complete=1; 
+  shrink=p.pChns.shrink;
+  p.pad=round(p.pad/shrink)*shrink; 
+  p.minDs=max(p.minDs,shrink*4);
+  if(p.nApprox<0)
+      p.nApprox=p.nPerOct-1; 
+  end
 end
-if(nargin==0), pyramid=p; return; end; pPyramid=p;
-vs=struct2cell(p); [pChns,nPerOct,nOctUp,nApprox,lambdas,...
-  pad,minDs,smooth,concat,~]=deal(vs{:}); shrink=pChns.shrink;
+if(nargin==0)
+    pyramid=p; 
+    return; 
+end; 
+pPyramid=p;
+vs=struct2cell(p); 
+[pChns,nPerOct,nOctUp,nApprox,lambdas,...
+  pad,minDs,smooth,concat,~] = deal(vs{:}); 
+shrink=pChns.shrink;
 
 % convert I to appropriate color space (or simply normalize)
-cs=pChns.pColor.colorSpace; sz=[size(I,1) size(I,2)];
+cs=pChns.pColor.colorSpace; 
+sz=[size(I,1) size(I,2)];
 if(~all(sz==0) && size(I,3)==1 && ~any(strcmpi(cs,{'gray','orig'}))),
   I=I(:,:,[1 1 1]); warning('Converting image to color'); end %#ok<WNTAG>
 %I=rgbConvert(I,cs); 
