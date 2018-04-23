@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><annotation>
-	<folder>Poles</folder>
-	<filename>VX61CHJ_20131126_161841_0082.xml</filename>
-	<path>C:\Users\NSE4CLJ\Desktop\Poles\VX61CHJ_20131126_161841_f000800.png</path>
+<annotation>
+	<folder>Positive Gray Scale</folder>
+	<filename>VX61CHJ_20131126_161841_0082.bmp</filename>
+	<path>C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Do Not Touch\Positive Gray Scale\VX61CHJ_20131126_161841_0082.bmp</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -69,6 +69,18 @@
 			<ymin>190</ymin>
 			<xmax>293</xmax>
 			<ymax>423</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1055</xmin>
+			<ymin>6</ymin>
+			<xmax>1084</xmax>
+			<ymax>386</ymax>
 		</bndbox>
 	</object>
 </annotation>

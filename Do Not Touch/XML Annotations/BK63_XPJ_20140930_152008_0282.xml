@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><annotation>
-	<folder>Poles</folder>
-	<filename>BK63_XPJ_20140930_152008_0282.xml</filename>
-	<path>C:\Users\NSE4CLJ\Desktop\Poles\BK63_XPJ_20140930_152008_f001200.png</path>
+<annotation>
+	<folder>Positive Gray Scale</folder>
+	<filename>BK63_XPJ_20140930_152008_0282.bmp</filename>
+	<path>C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Do Not Touch\Positive Gray Scale\BK63_XPJ_20140930_152008_0282.bmp</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -19,8 +19,8 @@
 		<bndbox>
 			<xmin>298</xmin>
 			<ymin>65</ymin>
-			<xmax>320</xmax>
-			<ymax>318</ymax>
+			<xmax>318</xmax>
+			<ymax>364</ymax>
 		</bndbox>
 	</object>
 	<object>

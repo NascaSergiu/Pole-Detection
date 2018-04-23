@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><annotation>
-	<folder>Poles</folder>
-	<filename>VU14XYL_X760_20141220_111139_0082.xml</filename>
-	<path>C:\Users\NSE4CLJ\Desktop\Poles\VU14XYL_X760_20141220_111139_f000800.png</path>
+<annotation>
+	<folder>Positive Gray Scale</folder>
+	<filename>VU14XYL_X760_20141220_111139_0082.bmp</filename>
+	<path>C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Do Not Touch\Positive Gray Scale\VU14XYL_X760_20141220_111139_0082.bmp</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -45,6 +45,18 @@
 			<ymin>224</ymin>
 			<xmax>630</xmax>
 			<ymax>379</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>236</xmin>
+			<ymin>310</ymin>
+			<xmax>247</xmax>
+			<ymax>454</ymax>
 		</bndbox>
 	</object>
 </annotation>

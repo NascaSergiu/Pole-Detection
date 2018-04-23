@@ -27,7 +27,7 @@ opts.pPyramid.pChns.pColor.colorSpace = 'gray';
 opts.pPyramid.pChns.pGradHist.softBin = 1; 
 opts.pPyramid.pChns.shrink = 2;
 
-opts.removeAnnotDepth = 0;
+opts.removeAnnotDepth = 1;
 opts.depthThreshold = 65;
 opts.pPyramid.pChns.pDisparity.enabled = 1;
 opts.pPyramid.pChns.pDisparity.maxDepth = 113;
@@ -63,8 +63,8 @@ opts.pLoad = [pLoad 'arRng', [-inf inf]];
 detector = acfTrain( opts );
 
 %% modify detector (see acfModify)
-pModify=struct('cascThr',-1,'cascCal',+.035);
-pModify.pNms = struct('thr', 30, 'overlap', 0.6);
+pModify=struct('cascThr',-1,'cascCal',-0.01);
+pModify.pNms = struct('thr', 35, 'overlap', 0.6);
 detector = acfModify(detector, pModify);
 
 %% test on sample image
@@ -76,10 +76,11 @@ if ismac
 elseif ispc
     imgNms = bbGt('getFiles', ...
         {'C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Positive Gray', ...
-        'C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Positive Disparity'});
+        'C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Positive Disparity', ...
+        'C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Annotations'});
 end
 
-for ii = 43:43
+for ii = 5:25
     ImgGray = imread(imgNms{1, ii});
     ImgDisp = imread(imgNms{2, ii});
     ImgComb = ImgAndDisp2Img(ImgGray, ImgDisp, opts.pPyramid.pChns.pDisparity);

@@ -1,7 +1,7 @@
 <annotation>
-	<folder>Images</folder>
+	<folder>Positive Gray Scale</folder>
 	<filename>VX13EKB_20131022_101813_0182.bmp</filename>
-	<path>C:\Users\NSE4CLJ\Desktop\Images\VX13EKB_20131022_101813_0182.bmp</path>
+	<path>C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Do Not Touch\Positive Gray Scale\VX13EKB_20131022_101813_0182.bmp</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -81,6 +81,18 @@
 			<ymin>290</ymin>
 			<xmax>986</xmax>
 			<ymax>454</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>280</xmin>
+			<ymin>251</ymin>
+			<xmax>289</xmax>
+			<ymax>407</ymax>
 		</bndbox>
 	</object>
 </annotation>

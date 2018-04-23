@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><annotation>
-	<folder>Poles</folder>
-	<filename>CTAG_3405GRX_20130826_113544_0282.xml</filename>
-	<path>C:\Users\NSE4CLJ\Desktop\Poles\CTAG_3405GRX_20130826_113544_f001200.png</path>
+<annotation>
+	<folder>Positive Gray Scale</folder>
+	<filename>CTAG_3405GRX_20130826_113544_0282.bmp</filename>
+	<path>C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Do Not Touch\Positive Gray Scale\CTAG_3405GRX_20130826_113544_0282.bmp</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -18,8 +18,8 @@
 		<difficult>0</difficult>
 		<bndbox>
 			<xmin>364</xmin>
-			<ymin>258</ymin>
-			<xmax>380</xmax>
+			<ymin>5</ymin>
+			<xmax>388</xmax>
 			<ymax>404</ymax>
 		</bndbox>
 	</object>

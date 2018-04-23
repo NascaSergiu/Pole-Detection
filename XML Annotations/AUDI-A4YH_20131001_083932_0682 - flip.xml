@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><annotation>
-	<folder>Images</folder>
-	<filename>AUDI-A4YH_20131001_083932_0682.bmp</filename>
-	<path>C:\Users\NSE4CLJ\Desktop\Images\AUDI-A4YH_20131001_083932_0682.bmp</path>
+<annotation>
+	<folder>Positive Gray</folder>
+	<filename>AUDI-A4YH_20131001_083932_0682 - flip.bmp</filename>
+	<path>C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Positive Gray\AUDI-A4YH_20131001_083932_0682 - flip.bmp</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -21,6 +21,30 @@
 			<ymin>4</ymin>
 			<xmax>975</xmax>
 			<ymax>411</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>848</xmin>
+			<ymin>249</ymin>
+			<xmax>856</xmax>
+			<ymax>346</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>783</xmin>
+			<ymin>261</ymin>
+			<xmax>790</xmax>
+			<ymax>389</ymax>
 		</bndbox>
 	</object>
 </annotation>
