@@ -472,8 +472,12 @@ end
   function [fs0,fs1] = getFiles0( dir1, f0, f1, sep )
     % get fs1 in dir1 (and fs0 without path or extension)
     fs1=dir([dir1 sep '*']); 
-    fs1={fs1.name}; 
-    fs1=fs1(3:end);
+    fs1={fs1.name};
+    if( strcmp(fs1(3), '.DS_Store'))
+        fs1=fs1(4:end);
+    else
+        fs1=fs1(3:end);
+    end
     fs1=fs1(f0:min(f1,end)); 
     fs0=fs1; 
     n=length(fs0);
@@ -594,7 +598,7 @@ else
   else
       dirs={gtDir,dtDir};
   end
-  fs=getFiles(dirs, 2); 
+  fs=getFiles(dirs, 1); 
   gtFs=fs(1,:);
   if(dtFile)
       dtFs=dtDir; 
@@ -1167,7 +1171,7 @@ function gt = preProcessing(gt, img, opts)
             end
         end
         nrPixeli = (int16(gt(i, 3)) + 1) * (int16(gt(i, 4)) + 1);
-        if( sumPixel < 30.0 / 100.0 * nrPixeli )
+        if( sumPixel < 50.0 / 100.0 * nrPixeli )
             gt(i, 5) = 1;
         end
     end

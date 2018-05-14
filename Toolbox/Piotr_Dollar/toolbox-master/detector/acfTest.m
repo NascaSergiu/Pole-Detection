@@ -103,6 +103,7 @@ ylabel('Number of poles');
 plot(fp, 'r');
 plot(tp, 'b');
 plot(miss, 'g');
+grid on
 legend({'false positive', 'true positive', 'miss'}, 'Location', 'northwest');
 
 %savefig([name 'Roc - '], show + 1, 'png');

@@ -128,6 +128,7 @@ if( ~isfield(pChns,'complete') || pChns.complete~=1 || isempty(I) )
       'pDisparity',{},...
       'pColor',{},...
       'pGradMag',{},...
+      'pGradMagDisp',{},...
       'pGradHist',{},...
       'pCustom',p,...
       'complete',1},1);
@@ -147,6 +148,12 @@ if( ~isfield(pChns,'complete') || pChns.complete~=1 || isempty(I) )
        'smooth',1,... 
        'colorSpace','luv'}, 1 );
   pChns.pGradMag = getPrmDflt( pChns.pGradMag,...
+      {'enabled',1,...
+       'colorChn',0,...
+       'normRad',5,...
+       'normConst',.005,...
+       'full',0}, 1 );
+  pChns.pGradMagDisp = getPrmDflt( pChns.pGradMagDisp,...
       {'enabled',1,...
        'colorChn',0,...
        'normRad',5,...
@@ -220,12 +227,14 @@ if( pChns.pGradHist.enabled )
 elseif( p.enabled )
   MGray = gradientMag(ImgGray, p.colorChn, p.normRad, p.normConst, full);
 end
+% figure();
+% im(MGray);
 if(p.enabled)
     chns = addChn(chns, MGray, nm, p, 0, h, w); 
 end
 
-% compute gradient magnitude channel for gray image
-p = pChns.pGradMag; 
+% compute gradient magnitude channel for disparity image
+p = pChns.pGradMagDisp; 
 nm = 'gradient magnitude disparity image';
 full = 0; 
 if(isfield(p,'full'))
@@ -236,6 +245,8 @@ if( pChns.pGradHist.enabled )
 elseif( p.enabled )
   MDisp = gradientMag(ImgDisp, p.colorChn, p.normRad, p.normConst, full);
 end
+% figure();
+% im(MDisp);
 if(p.enabled)
     chns = addChn(chns, MDisp, nm, p, 0, h, w); 
 end
@@ -252,7 +263,7 @@ if( p.enabled )
   chns = addChn(chns, HGray, nm, pChns.pGradHist, 0, h, w);
 end
 
-% compute gradient histgoram channels for gray image
+% compute gradient histgoram channels for disparity image
 p = pChns.pGradHist; 
 nm = 'gradient histogram disparity image';
 if( p.enabled )

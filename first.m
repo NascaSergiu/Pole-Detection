@@ -7,19 +7,22 @@
 %% set up opts for training detector (see acfTrain)
 opts = acfTrain();
 opts.modelDs = [270 15]; 
-opts.modelDsPad = [540 30];
+opts.modelDsPad = [380 65];
 
 opts.nWeak = [64 256 1024 4096];
 opts.pBoost.pTree.maxDepth = 5; 
-opts.pBoost.discrete = 1;
+opts.pBoost.discrete = 0;
 opts.pBoost.pTree.fracFtrs = 1/16;
 
-opts.pNms.overlap = 0.3;
-opts.pNms.thr = 20;
-opts.pNms.combine = 0.1;
+opts.stride = 6;
+
+opts.pNms.overlap = 0.6;
+opts.pNms.thr = 35;
+opts.pNms.combine = 0.2;
 
 opts.nNeg = 25000; 
 opts.nAccNeg = 50000;
+opts.pJitter = struct('flip',1);
  
 opts.pPyramid.pChns.pColor.enabled = 1;
 opts.pPyramid.pChns.pColor.smooth = 1;
@@ -27,8 +30,14 @@ opts.pPyramid.pChns.pColor.colorSpace = 'gray';
 opts.pPyramid.pChns.pGradHist.softBin = 1; 
 opts.pPyramid.pChns.shrink = 2;
 
+opts.pPyramid.pChns.pGradMag.normConst = 20;
+opts.pPyramid.pChns.pGradMag.normRad = 0.01;
+
+opts.pPyramid.pChns.pGradMagDisp.normConst = 5;
+opts.pPyramid.pChns.pGradMagDisp.normRad = 0.007;
+
 opts.removeAnnotDepth = 1;
-opts.depthThreshold = 65;
+opts.depthThreshold = 50;
 opts.pPyramid.pChns.pDisparity.enabled = 1;
 opts.pPyramid.pChns.pDisparity.maxDepth = 113;
 opts.pPyramid.pChns.pDisparity.periodicalFlagU16 = 8192;
@@ -56,23 +65,23 @@ end
 
 pLoad={'lbls', {'pole'}, ...
     'ilbls', {''}, ...
-    'squarify', {0.058, 0.053}};
+    'squarify', {0.065, 0.045}};
 opts.pLoad = [pLoad 'arRng', [-inf inf]];
 
 %% train detector (see acfTrain)
 detector = acfTrain( opts );
 
 %% modify detector (see acfModify)
-pModify=struct('cascThr',-1,'cascCal',-0.01);
+pModify = struct('cascThr',-1,'cascCal', -0.1);
 pModify.pNms = struct('thr', 35, 'overlap', 0.6);
 detector = acfModify(detector, pModify);
 
 %% test on sample image
 if ismac
     imgNms = bbGt('getFiles', ...
-        {'/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray', ...
-        '/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Disparity', ...
-        '/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Annotations'});
+        {'/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Do Not Touch/Gabi/LB-X_5326_20160801_11311320170223_151910/image_view', ...
+        '/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Do Not Touch/Gabi/LB-X_5326_20160801_11311320170223_151910/disparity', ...
+        });
 elseif ispc
     imgNms = bbGt('getFiles', ...
         {'C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Positive Gray', ...
@@ -80,46 +89,48 @@ elseif ispc
         'C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Annotations'});
 end
 
-for ii = 5:25
+for ii = 1:78
     ImgGray = imread(imgNms{1, ii});
     ImgDisp = imread(imgNms{2, ii});
     ImgComb = ImgAndDisp2Img(ImgGray, ImgDisp, opts.pPyramid.pChns.pDisparity);
     
     dt = acfDetect(ImgComb, detector);
-    [~,gt] = bbGt('bbLoad', imgNms{3, ii}, opts.pLoad);
+%     [~,gt] = bbGt('bbLoad', imgNms{3, ii}, opts.pLoad);
+%     
+%     if( opts.removeAnnotDepth )
+%         gt = bbGt('preProcessing', gt, ImgComb, opts);
+%     end
+%     
+%     gtValid = gt(gt(:,5)==0,1:4);
+%     gtNValid = gt(gt(:,5)==1,1:4);
     
-    if( opts.removeAnnotDepth )
-        gt = bbGt('preProcessing', gt, ImgComb, opts);
-    end
-    
-    gtValid = gt(gt(:,5)==0,1:4);
-    gtNValid = gt(gt(:,5)==1,1:4);
-    
-    figure(2); 
+    figure(1); 
     im(ImgGray); 
     
     bbApply( 'draw', dt);
     bbApply( 'draw', gtNValid, 'r');
     bbApply( 'draw', gtValid, 'b');
     
-    pause(1.5);
+    waitforbuttonpress();
 end
 
 %% check disparity image
 
-ImgGray = imread('/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray/AUDI-A4YH_20131001_083932_2682 - flip.bmp');
-ImgDisp = imread('/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Disparity/AUDI-A4YH_20131001_083932_2682 - flip.pgm');
-ImgComb = ImgAndDisp2Img(ImgGray, ImgDisp, opts.pPyramid.pChns.pDisparity);
+ImgGray = imread('/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray/AUDI-A4YH_20131001_083932_0482.bmp');
+ImgDisp = imread('/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Disparity/AUDI-A4YH_20131001_083932_0482.pgm');
+[ImgComb, ImgDisp2] = ImgAndDisp2Img(ImgGray, ImgDisp, opts.pPyramid.pChns.pDisparity);
 ImgDisp = ImgComb(:,:,2);
+
 Img = imfuse(ImgGray, ImgDisp, 'blend');
 figure(10);
-imshow(Img);
+im(Img);
+
 figure(20);
-imshow(ImgDisp);
+im(ImgDisp);
 
 %% test detector and plot roc (see acfTest)
-pModify=struct('cascThr',-1,'cascCal',+.035);
-pModify.pNms = struct('thr', 30, 'overlap', 0.6);
+pModify=struct('cascThr', -1, 'cascCal', +0.0);
+pModify.pNms = struct('thr', 35, 'overlap', 0.6);
 if ismac
     [~,~,gt,dt]=acfTest('name',opts.name, ...
         'imgDir','/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray', ...
@@ -127,7 +138,7 @@ if ismac
         'gtDir','/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Annotations', ...
         'pLoad',[pLoad, ...
         'arRng', [-inf inf]], ...
-        'reapply', 0, ...
+        'reapply', 1, ...
         'thr', .15, ...
         'pModify', pModify, ...
         'show', 2);
@@ -138,7 +149,7 @@ elseif ispc
         'gtDir','C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Annotations', ...
         'pLoad', [pLoad, ...
         'arRng', [-inf inf]], ...
-        'reapply', 0, ...
+        'reapply', 1, ...
         'thr', .15, ...
         'pModify', pModify, ...
         'show', 2);
