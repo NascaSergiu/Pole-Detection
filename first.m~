@@ -93,27 +93,27 @@ elseif ispc
         'C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Annotations'});
 end
 
-for ii = 76:163
+for ii = 1:78
     ImgGray = imread(imgNms{1, ii});
     ImgDisp = imread(imgNms{2, ii});
     ImgComb = ImgAndDisp2Img(ImgGray, ImgDisp, opts.pPyramid.pChns.pDisparity);
     
     dt = acfDetect(ImgComb, detector);
-%     [~,gt] = bbGt('bbLoad', imgNms{3, ii}, opts.pLoad);
+    [~,gt] = bbGt('bbLoad', imgNms{3, ii}, opts.pLoad);
     
     if( opts.removeAnnotDepth )
-%         gt = bbGt('preProcessing', gt, ImgComb, opts);
+        gt = bbGt('preProcessing', gt, ImgComb, opts);
     end
     
-%     gtValid = gt(gt(:,5)==0,1:4);
-%     gtNValid = gt(gt(:,5)==1,1:4);
-%     
-%     figure(1); 
-%     im(ImgGray); 
-%     
-%     bbApply( 'draw', dt);
-%     bbApply( 'draw', gtNValid, 'r');
-%     bbApply( 'draw', gtValid, 'b');
+    gtValid = gt(gt(:,5)==0,1:4);
+    gtNValid = gt(gt(:,5)==1,1:4);
+    
+    figure(1); 
+    im(ImgGray); 
+    
+    bbApply( 'draw', dt);
+    bbApply( 'draw', gtNValid, 'r');
+    bbApply( 'draw', gtValid, 'b');
     
     outputImg = bbApply( 'embed', ImgGray, dt);
     

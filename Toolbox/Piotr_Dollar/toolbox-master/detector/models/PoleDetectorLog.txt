@@ -1,65 +1,68 @@
 ---------------------------------------------------------------------------
 Training stage 0
-Sampled 267 windows from 250 images.
-Done sampling windows (time=62s).
-Computing lambdas... done (time=8s).
+Sampled 256 windows from 250 images.
+Done sampling windows (time=51s).
+Computing lambdas... done (time=6s).
 Extracting features... done (time=1s).
 Sampled 6112 windows from 250 images.
-Done sampling windows (time=66s).
-Extracting features... done (time=16s).
-Training AdaBoost: nWeak= 64 nFtrs=94050 pos=534 neg=6112
- i=  16 alpha=1.000 err=0.021 loss=8.69e-10
- i=  32 alpha=1.000 err=0.023 loss=2.12e-19
- i=  48 alpha=1.000 err=0.011 loss=1.41e-29
- i=  64 alpha=1.000 err=0.021 loss=1.85e-39
-Done training err=0.0000 fp=0.0000 fn=0.0000 (t=78.5s).
-Done training stage 0 (time=237s).
+Done sampling windows (time=58s).
+Extracting features... done (time=7s).
+Training AdaBoost: nWeak= 64 nFtrs=26670 pos=512 neg=6112
+ i=  16 alpha=1.000 err=0.019 loss=7.82e-10
+ i=  32 alpha=1.000 err=0.012 loss=2.42e-19
+ i=  48 alpha=1.000 err=0.013 loss=6.56e-29
+ i=  64 alpha=1.000 err=0.028 loss=1.49e-38
+Done training err=0.0000 fp=0.0000 fn=0.0000 (t=20.5s).
+Done training stage 0 (time=144s).
 ---------------------------------------------------------------------------
 Training stage 1
-Sampled 653 windows from 250 images.
-Done sampling windows (time=76s).
+Sampled 654 windows from 250 images.
+Done sampling windows (time=65s).
 Extracting features... done (time=1s).
-Training AdaBoost: nWeak=256 nFtrs=94050 pos=534 neg=6765
- i=  16 alpha=1.000 err=0.056 loss=4.65e-06
- i=  32 alpha=1.000 err=0.051 loss=2.11e-12
- i=  48 alpha=1.000 err=0.065 loss=1.52e-18
- i=  64 alpha=1.000 err=0.059 loss=8.89e-25
- i=  80 alpha=1.000 err=0.041 loss=1.93e-31
- i=  96 alpha=1.000 err=0.056 loss=8.41e-38
+Training AdaBoost: nWeak=256 nFtrs=26670 pos=512 neg=6766
+ i=  16 alpha=1.000 err=0.087 loss=1.62e-05
+ i=  32 alpha=1.000 err=0.059 loss=4.27e-11
+ i=  48 alpha=1.000 err=0.045 loss=6.65e-17
+ i=  64 alpha=1.000 err=0.049 loss=6.68e-23
+ i=  80 alpha=1.000 err=0.066 loss=4.35e-29
+ i=  96 alpha=1.000 err=0.048 loss=5.42e-35
+ i= 112 alpha=1.000 err=0.065 loss=1.15e-40
  stopping early
-Done training err=0.0000 fp=0.0000 fn=0.0000 (t=154.0s).
-Done training stage 1 (time=234s).
+Done training err=0.0000 fp=0.0000 fn=0.0000 (t=44.6s).
+Done training stage 1 (time=111s).
 ---------------------------------------------------------------------------
 Training stage 2
-Sampled 85 windows from 250 images.
-Done sampling windows (time=74s).
+Sampled 106 windows from 250 images.
+Done sampling windows (time=60s).
 Extracting features... done (time=0s).
-Training AdaBoost: nWeak=1024 nFtrs=94050 pos=534 neg=6850
- i=  16 alpha=1.000 err=0.059 loss=9.66e-06
- i=  32 alpha=1.000 err=0.058 loss=2.16e-11
- i=  48 alpha=1.000 err=0.092 loss=4.30e-17
- i=  64 alpha=1.000 err=0.053 loss=3.92e-23
- i=  80 alpha=1.000 err=0.061 loss=7.35e-29
- i=  96 alpha=1.000 err=0.083 loss=1.88e-34
- i= 112 alpha=1.000 err=0.086 loss=2.81e-40
+Training AdaBoost: nWeak=1024 nFtrs=26670 pos=512 neg=6872
+ i=  16 alpha=1.000 err=0.083 loss=9.47e-05
+ i=  32 alpha=1.000 err=0.067 loss=1.22e-09
+ i=  48 alpha=1.000 err=0.064 loss=6.07e-15
+ i=  64 alpha=1.000 err=0.092 loss=6.42e-20
+ i=  80 alpha=1.000 err=0.059 loss=3.70e-25
+ i=  96 alpha=1.000 err=0.052 loss=2.74e-30
+ i= 112 alpha=1.000 err=0.082 loss=2.11e-35
+ i= 128 alpha=1.000 err=0.067 loss=1.39e-40
  stopping early
-Done training err=0.0000 fp=0.0000 fn=0.0000 (t=173.1s).
-Done training stage 2 (time=250s).
+Done training err=0.0000 fp=0.0000 fn=0.0000 (t=53.9s).
+Done training stage 2 (time=115s).
 ---------------------------------------------------------------------------
 Training stage 3
-Sampled 46 windows from 250 images.
-Done sampling windows (time=73s).
+Sampled 44 windows from 250 images.
+Done sampling windows (time=59s).
 Extracting features... done (time=0s).
-Training AdaBoost: nWeak=4096 nFtrs=94050 pos=534 neg=6896
- i=  16 alpha=1.000 err=0.054 loss=2.10e-05
- i=  32 alpha=1.000 err=0.055 loss=9.17e-11
- i=  48 alpha=1.000 err=0.067 loss=3.92e-16
- i=  64 alpha=1.000 err=0.085 loss=1.73e-21
- i=  80 alpha=1.000 err=0.071 loss=5.45e-27
- i=  96 alpha=1.000 err=0.089 loss=1.79e-32
- i= 112 alpha=1.000 err=0.060 loss=4.59e-38
+Training AdaBoost: nWeak=4096 nFtrs=26670 pos=512 neg=6916
+ i=  16 alpha=1.000 err=0.083 loss=1.19e-04
+ i=  32 alpha=1.000 err=0.092 loss=4.80e-09
+ i=  48 alpha=1.000 err=0.076 loss=9.09e-14
+ i=  64 alpha=1.000 err=0.076 loss=2.23e-18
+ i=  80 alpha=1.000 err=0.084 loss=4.11e-23
+ i=  96 alpha=1.000 err=0.097 loss=5.32e-28
+ i= 112 alpha=1.000 err=0.089 loss=9.03e-33
+ i= 128 alpha=1.000 err=0.069 loss=5.79e-38
  stopping early
-Done training err=0.0000 fp=0.0000 fn=0.0000 (t=190.3s).
-Done training stage 3 (time=266s).
+Done training err=0.0000 fp=0.0000 fn=0.0000 (t=56.5s).
+Done training stage 3 (time=116s).
 ---------------------------------------------------------------------------
-Done training (time=987s).
+Done training (time=487s).

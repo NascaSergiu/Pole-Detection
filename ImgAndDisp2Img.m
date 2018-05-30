@@ -33,9 +33,6 @@ for x = 1:size(imgOut, 1)
     end
 end
 
-figure(21);
-im(imgOut);
-
 imgOut = lensdistort(imgOut, 0.09);
 imgOut = imgOut(:, 7:size(imgOut,2)-7);
 imgOut = imresize(imgOut, [700 1230]);
