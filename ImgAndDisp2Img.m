@@ -48,6 +48,8 @@ imgOut = imadjust(imgOut);
 figure(20);
 im(imgOut);
 
+% imwrite(imgOut, '/Users/nascasergiualin/Documents/Output Movie Bosch/Pole Detection/img_Disp.png');
+
 end
 
 function imgOut = combineGrayAndDisparity(I, IDisp, opts)

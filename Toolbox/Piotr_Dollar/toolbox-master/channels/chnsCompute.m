@@ -227,8 +227,9 @@ if( pChns.pGradHist.enabled )
 elseif( p.enabled )
   MGray = gradientMag(ImgGray, p.colorChn, p.normRad, p.normConst, full);
 end
-% figure();
-% im(MGray);
+
+% imwrite(MGray, '/Users/nascasergiualin/Documents/Output Movie Bosch/Pole Detection/imgMag.png');
+
 if(p.enabled)
     chns = addChn(chns, MGray, nm, p, 0, h, w); 
 end
@@ -245,8 +246,9 @@ if( pChns.pGradHist.enabled )
 elseif( p.enabled )
   MDisp = gradientMag(ImgDisp, p.colorChn, p.normRad, p.normConst, full);
 end
-% figure();
-% im(MDisp);
+
+% imwrite(MDisp, '/Users/nascasergiualin/Documents/Output Movie Bosch/Pole Detection/imgMagDisp.png');
+
 if(p.enabled)
     chns = addChn(chns, MDisp, nm, p, 0, h, w); 
 end
@@ -273,6 +275,10 @@ if( p.enabled )
   end
   HDisp = gradientHist(MDisp, ODisp, binSize, p.nOrients, p.softBin, p.useHog, p.clipHog, full);
   chns = addChn(chns, HDisp, nm, pChns.pGradHist, 0, h, w);
+end
+
+for i=1:6
+%     imwrite(HDisp(:,:,i), strcat('/Users/nascasergiualin/Documents/Output Movie Bosch/Pole Detection/imgHOGDisp_', int2str((i-1)* 30), '.png'));
 end
 
 % compute custom channels for gray image

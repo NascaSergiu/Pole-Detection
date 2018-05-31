@@ -7,10 +7,10 @@
 %% set up opts for training detector (see acfTrain)
 opts = acfTrain();
 opts.modelDs = [270 15]; 
-opts.modelDsPad = [380 45];
+opts.modelDsPad = [300 60];
 
 opts.nWeak = [64 256 1024 4096];
-opts.pBoost.pTree.maxDepth = 5; 
+opts.pBoost.pTree.maxDepth = 4; 
 opts.pBoost.discrete = 0;
 opts.pBoost.pTree.fracFtrs = 1/16;
 
@@ -28,13 +28,13 @@ opts.pPyramid.pChns.pColor.enabled = 0;
 opts.pPyramid.pChns.pColor.smooth = 1;
 opts.pPyramid.pChns.pColor.colorSpace = 'gray';
 opts.pPyramid.pChns.pGradHist.softBin = 1; 
-opts.pPyramid.pChns.shrink = 3;
+opts.pPyramid.pChns.shrink = 2;
 
-opts.pPyramid.pChns.pGradMag.normConst = 20;
-opts.pPyramid.pChns.pGradMag.normRad = 0.01;
-
-opts.pPyramid.pChns.pGradMagDisp.normConst = 5;
-opts.pPyramid.pChns.pGradMagDisp.normRad = 0.007;
+% opts.pPyramid.pChns.pGradMag.normConst = 20;
+% opts.pPyramid.pChns.pGradMag.normRad = 0.01;
+% 
+% opts.pPyramid.pChns.pGradMagDisp.normConst = 5;
+% opts.pPyramid.pChns.pGradMagDisp.normRad = 0.007;
 
 opts.removeAnnotDepth = 1;
 opts.depthThreshold = 50;
@@ -72,7 +72,7 @@ opts.pLoad = [pLoad 'arRng', [-inf inf]];
 detector = acfTrain( opts );
 
 %% modify detector (see acfModify)
-pModify = struct('cascThr',-1,'cascCal', -0.1);
+pModify = struct('cascThr',-1,'cascCal', +0.022);
 pModify.pNms = struct('thr', 35, 'overlap', 0.6);
 detector = acfModify(detector, pModify);
 
@@ -93,18 +93,21 @@ elseif ispc
         'C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Annotations'});
 end
 
-for ii = 76:163
+for ii = 1:163
     ImgGray = imread(imgNms{1, ii});
+    
+%     imwrite(ImgGray, '/Users/nascasergiualin/Documents/Output Movie Bosch/Pole Detection/img_Gray.png');
+    
     ImgDisp = imread(imgNms{2, ii});
     ImgComb = ImgAndDisp2Img(ImgGray, ImgDisp, opts.pPyramid.pChns.pDisparity);
     
     dt = acfDetect(ImgComb, detector);
 %     [~,gt] = bbGt('bbLoad', imgNms{3, ii}, opts.pLoad);
-    
-    if( opts.removeAnnotDepth )
+%     
+%     if( opts.removeAnnotDepth )
 %         gt = bbGt('preProcessing', gt, ImgComb, opts);
-    end
-    
+%     end
+%     
 %     gtValid = gt(gt(:,5)==0,1:4);
 %     gtNValid = gt(gt(:,5)==1,1:4);
 %     
@@ -115,9 +118,11 @@ for ii = 76:163
 %     bbApply( 'draw', gtNValid, 'r');
 %     bbApply( 'draw', gtValid, 'b');
     
-    outputImg = bbApply( 'embed', ImgGray, dt);
+    outputImg = bbApply( 'embed', ImgGray, dt, 'col',[0 255 0]);
+%     outputImg = bbApply( 'embed', outputImg, gtNValid, 'col',[255 0 0]);
+%     outputImg = bbApply( 'embed', outputImg, gtValid, 'col',[0 0 255]);
     
-    imwrite(outputImg, strcat('/Users/nascasergiualin/Documents/Output Movie Bosch/Pole Detection/img_', int2str(ii), '.png'));
+    imwrite(outputImg, strcat('/Users/nascasergiualin/Documents/Output Movie Bosch/Pole Detection/imgTest_', int2str(ii), '.png'));
     
     %waitforbuttonpress();
 end
