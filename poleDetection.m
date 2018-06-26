@@ -77,6 +77,9 @@ pModify.pNms = struct('thr', 35, 'overlap', 0.6);
 detector = acfModify(detector, pModify);
 
 %% test on sample image
+writeImges = 0;
+showImage = 1;
+
 if ismac
 %     imgNms = bbGt('getFiles', ...
 %         {'./Visualization/LB-X_5326_20160801_11311320170223_151910/image_view', ...
@@ -106,9 +109,10 @@ for ii = 1:size(imgNms, 2)
     end
     
     dt = acfDetect(Img, detector);
-    [~,gt] = bbGt('bbLoad', imgNms{3, ii}, opts.pLoad);
     
     if(size(imgNms, 1) == 3)
+        [~,gt] = bbGt('bbLoad', imgNms{3, ii}, opts.pLoad);
+        
         if( opts.removeAnnotDepth && opts.useDispImage == 1 )
             gt = bbGt('preProcessing', gt, Img, opts);
         end
@@ -117,17 +121,36 @@ for ii = 1:size(imgNms, 2)
         gtNValid = gt(gt(:,5)==1,1:4);
     end
     
-    figure(1); 
-    im(Img(:, :, 1)); 
+    if(showImage == 1)
+        figure(1); 
+        im(Img(:, :, 1)); 
+
+        bbApply( 'draw', dt);
+
+        if(size(imgNms, 1) == 3)
+            bbApply( 'draw', gtNValid, 'r');
+            bbApply( 'draw', gtValid, 'b');
+        end
+    end
     
-    bbApply( 'draw', dt);
-    
-    if(size(imgNms, 1) == 3)
-        bbApply( 'draw', gtNValid, 'r');
-        bbApply( 'draw', gtValid, 'b');
+    if(writeImges == 1)
+        outputImg = Img(:, :, 1);
+        outputImg = bbApply( 'embed', outputImg, dt, 'col', [0, 255, 0], 'fh', 0);
+        if(size(imgNms, 1) == 3)
+            outputImg = bbApply( 'embed', outputImg, gtNValid, 'col', [255, 0, 0]);
+            outputImg = bbApply( 'embed', outputImg, gtValid, 'col', [0, 0, 255]);
+        end
+        
+        if ismac
+            imwrite(outputImg, strcat('./OutputImages/image_', int2str(ii),'.png'));
+        elseif ispc
+            imwrite(outputImg, strcat('.\OutputImages\image_', int2str(ii),'.png'));
+        end
     end
 
-    waitforbuttonpress();
+    if(showImage == 1)
+        waitforbuttonpress();
+    end
 end
 %% test detector and plot roc (see acfTest)
 if ismac

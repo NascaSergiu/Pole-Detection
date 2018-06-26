@@ -89,7 +89,7 @@ if(isempty(thr))
 end
 if(strcmp(ovrDnm,'union'))
     ovrDnm=1; 
-elseif(strcmp(ovrDnm,'min')),
+elseif(strcmp(ovrDnm,'min'))
   ovrDnm=0; 
 else
     assert(false); 
@@ -185,12 +185,12 @@ end
                 kp(j) = 0; 
             end
             
-            %combine = 1;
+%             combine = 1;
             if(o > combine)
                 bbs(i, 1) = min(bbs(i, 1), bbs(j, 1));
                 bbs(i, 2) = min(bbs(i, 2), bbs(j, 2));
-                bbs(i, 3) = max(bbs(i, 3), bbs(j, 3));
-                bbs(i, 4) = max(bbs(i, 4), bbs(j, 4));
+                bbs(i, 3) = max(bbs(i, 1) + bbs(i, 3), bbs(j, 1) + bbs(j, 3)) - bbs(i, 1);
+                bbs(i, 4) = max(bbs(i, 2) + bbs(i, 4), bbs(j, 2) + bbs(j, 4)) - bbs(i, 2);
                 kp(j) = 0;
             end
         end

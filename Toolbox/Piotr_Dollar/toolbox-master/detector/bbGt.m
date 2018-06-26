@@ -759,7 +759,7 @@ for d=1:nd
   % store type of match for both dt and gt
   if(m==-1)
       dt(d,6)=m; 
-  elseif(m==1), 
+  elseif(m==1)
       gt(g,5)=m; 
       dt(d,6)=m; 
   end
@@ -841,7 +841,7 @@ for d=1:nd
   % store type of match for both dt and gt
   if(m==-1)
       dt(d,6)=m; 
-  elseif(m==1), 
+  elseif(m==1) 
       gt(g,6)=m; 
       dt(d,6)=m; 
   end

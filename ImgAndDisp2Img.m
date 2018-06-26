@@ -2,7 +2,7 @@
 function [imgOut, IDisp] = ImgAndDisp2Img(ImgGray, ImgDisp, opts)
 
 IDisp = calculateDepthFromDisparity(ImgDisp, opts);
-imgOut = combineGrayAndDisparity(ImgGray, IDisp, opts);
+imgOut = combineGrayAndDisparity(ImgGray, IDisp);
 
 end
 
@@ -44,8 +44,6 @@ imgOut = medfilt2(imgOut, [7 7]);
 imgOut = uint8(255 * mat2gray(imgOut));
 imgOut = imadjust(imgOut);
 
-imwrite(imgOut, '/Users/nascasergiualin/Documents/Output Movie Bosch/Pole Detection/img_Disp.png');
-
 imgOut = lensdistort(imgOut, 0.09);
 imgOut = imgOut(:, 7:size(imgOut,2)-7);
 imgOut = imresize(imgOut, [700 1230]);
@@ -57,28 +55,9 @@ imgOut = padarray(imgOut, [0 30], 255, 'post');
 
 end
 
-function imgOut = combineGrayAndDisparity(I, IDisp, opts)
+function imgOut = combineGrayAndDisparity(I, IDisp)
 imgOut = I;
 imgDepth = size(imgOut, 3);
 imgOut(:,:,imgDepth + 1) = IDisp;
-
-% multiFactor = 255.0 / opts.maxDepth;
-% 
-% for x = 1:size(IDisp, 1)
-%     for y = 1:size(IDisp, 2)
-%         if IDisp(x, y) > opts.maxDepth || IDisp(x,y) == Inf
-%             imgOut(x * 2 - 1 + 24, y * 2 - 1 + 18, imgDepth + 1) = 255;
-%             imgOut(x * 2 - 1 + 24, y * 2 + 18, imgDepth + 1) = 255;
-%             imgOut(x * 2 + 24, y * 2 - 1 + 18, imgDepth + 1) = 255;
-%             imgOut(x * 2 + 24, y * 2 + 18, imgDepth + 1) = 255;
-%         else
-%             imgOut(x * 2 - 1 + 24, y * 2 - 1 + 18, imgDepth + 1) = multiFactor * IDisp(x, y);
-%             imgOut(x * 2 - 1 + 24, y * 2 + 18, imgDepth + 1) = multiFactor * IDisp(x, y);
-%             imgOut(x * 2 + 24, y * 2 - 1 + 18, imgDepth + 1) = multiFactor * IDisp(x, y);
-%             imgOut(x * 2 + 24, y * 2 + 18, imgDepth + 1) = multiFactor * IDisp(x, y);
-%         end
-%     end
-% end
-
 end
 
