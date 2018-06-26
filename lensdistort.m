@@ -97,7 +97,7 @@ addRequired(p,'k',@isnumeric);
 defaultFtype = 4;
 defaultBorder = 'fit';
 defaultInterpolation = 'nearest';
-defaultPadmethod = 'symmetric';
+defaultPadmethod = 'bound';
 
 %   Specifies valid strings for the optional parameters
 validBorder = {'fit','crop'};

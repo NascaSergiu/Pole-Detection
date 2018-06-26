@@ -1,7 +1,7 @@
 <annotation>
-	<folder>Positive Gray Scale</folder>
+	<folder>Positive Gray</folder>
 	<filename>RVX13EKB_20140721_143906_0182.bmp</filename>
-	<path>C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Do Not Touch\Positive Gray Scale\RVX13EKB_20140721_143906_0182.bmp</path>
+	<path>/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray/RVX13EKB_20140721_143906_0182.bmp</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -53,9 +53,9 @@
 		<truncated>0</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>868</xmin>
-			<ymin>180</ymin>
-			<xmax>877</xmax>
+			<xmin>864</xmin>
+			<ymin>171</ymin>
+			<xmax>879</xmax>
 			<ymax>308</ymax>
 		</bndbox>
 	</object>
@@ -65,10 +65,22 @@
 		<truncated>0</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>888</xmin>
-			<ymin>214</ymin>
-			<xmax>894</xmax>
-			<ymax>313</ymax>
+			<xmin>861</xmin>
+			<ymin>284</ymin>
+			<xmax>869</xmax>
+			<ymax>377</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>887</xmin>
+			<ymin>213</ymin>
+			<xmax>895</xmax>
+			<ymax>316</ymax>
 		</bndbox>
 	</object>
 </annotation>

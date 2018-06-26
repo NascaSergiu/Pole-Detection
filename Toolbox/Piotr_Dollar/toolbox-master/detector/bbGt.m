@@ -991,7 +991,7 @@ else
 end
 end
 
-function [xs, ys, ref] = compRoc2( gt, dt)
+function [xs, ys, ref] = compRocGrayDisp( gt, dt)
 xs = zeros(1, size(dt, 2));
 ys = zeros(1, size(dt, 2));
 ref = zeros(1, size(dt, 2));
@@ -1005,8 +1005,32 @@ for i = 1:size(dt, 2)
     
     tp = tp + size(bbsDt(bbsDt(:,6)==1, :), 1);
     fp = fp + size(bbsDt(bbsDt(:,6)==0, :), 1);
-    bbsGt = bbsGt(bbsGt(:,5) == 0, 1:6);
-    bbsGt = bbsGt(bbsGt(:,6) == 0, 1:6);
+    bbsGt = bbsGt(bbsGt(:,5) == 0, :);
+    bbsGt = bbsGt(bbsGt(:,6) == 0, :);
+    miss = miss + size(bbsGt, 1);
+    
+    xs(i) = fp;
+    ys(i) = tp;
+    ref(i) = miss;
+end
+end
+
+function [xs, ys, ref] = compRocGray( gt, dt)
+xs = zeros(1, size(dt, 2));
+ys = zeros(1, size(dt, 2));
+ref = zeros(1, size(dt, 2));
+
+tp = 0;
+fp = 0;
+miss = 0;
+for i = 1:size(dt, 2)
+    bbsDt = dt{i};
+    bbsGt = gt{i};
+    
+    tp = tp + size(bbsDt(bbsDt(:,6)==1, :), 1);
+    fp = fp + size(bbsDt(bbsDt(:,6)==0, :), 1);
+    bbsGt = bbsGt(bbsGt(:,5) == 0, :);
+    bbsGt = bbsGt(bbsGt(:,6) == 0, :);
     miss = miss + size(bbsGt, 1);
     
     xs(i) = fp;
@@ -1161,17 +1185,23 @@ function gt = preProcessing(gt, img, opts)
     imageDepth = size(img, 3);
     multiFactor = 255.0 / opts.pPyramid.pChns.pDisparity.maxDepth;
     maxDepthValue = opts.depthThreshold * multiFactor;
+    
     for i = 1:size(gt, 1)
         sumPixel = 0;
-        for x = int16(gt(i, 2)):int16((gt(i, 2) + gt(i, 4)))
-            for y = int16(gt(i, 1)):int16(gt(i, 1) + gt(i, 3))
-                if( img( x, y, imageDepth ) <= maxDepthValue )
-                    sumPixel = sumPixel + 1;
+        for x = int16(max(gt(i, 2), 0)):int16(min(gt(i, 2) + gt(i, 4), size(img, 1)))
+            for y = int16(max(gt(i, 1), 0)):int16(min(gt(i, 1) + gt(i, 3), size(img, 2)))
+                if( x > 0 && y > 0 && x < size(img, 1) && y < size(img, 2))
+                    if( img( x, y, imageDepth ) > 15 )
+                            sumPixel = sumPixel + 1;
+                    end
                 end
             end
         end
         nrPixeli = (int16(gt(i, 3)) + 1) * (int16(gt(i, 4)) + 1);
         if( sumPixel < 50.0 / 100.0 * nrPixeli )
+            gt(i, 5) = 1;
+        end
+        if( gt(i, 3) * gt(i, 4) <  (size(img, 1) * size(img, 2)) * 0.002  )
             gt(i, 5) = 1;
         end
     end

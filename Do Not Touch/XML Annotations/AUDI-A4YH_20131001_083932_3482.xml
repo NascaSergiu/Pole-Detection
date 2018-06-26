@@ -1,7 +1,7 @@
 <annotation>
-	<folder>Positive Gray Scale</folder>
+	<folder>Images</folder>
 	<filename>AUDI-A4YH_20131001_083932_3482.bmp</filename>
-	<path>C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Do Not Touch\Positive Gray Scale\AUDI-A4YH_20131001_083932_3482.bmp</path>
+	<path>C:\Users\NSE4CLJ\Desktop\Images\AUDI-A4YH_20131001_083932_3482.bmp</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -18,8 +18,8 @@
 		<difficult>0</difficult>
 		<bndbox>
 			<xmin>1145</xmin>
-			<ymin>107</ymin>
-			<xmax>1158</xmax>
+			<ymin>109</ymin>
+			<xmax>1162</xmax>
 			<ymax>329</ymax>
 		</bndbox>
 	</object>

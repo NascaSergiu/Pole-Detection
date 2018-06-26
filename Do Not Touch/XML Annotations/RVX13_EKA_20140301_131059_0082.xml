@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><annotation>
-	<folder>Poles</folder>
-	<filename>RVX13_EKA_20140301_131059_0082.xml</filename>
-	<path>C:\Users\NSE4CLJ\Desktop\Poles\RVX13_EKA_20140301_131059_f000800.png</path>
+<annotation>
+	<folder>Positive Gray</folder>
+	<filename>RVX13_EKA_20140301_131059_0082.bmp</filename>
+	<path>/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray/RVX13_EKA_20140301_131059_0082.bmp</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -57,6 +57,18 @@
 			<ymin>103</ymin>
 			<xmax>684</xmax>
 			<ymax>297</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>629</xmin>
+			<ymin>206</ymin>
+			<xmax>639</xmax>
+			<ymax>304</ymax>
 		</bndbox>
 	</object>
 </annotation>

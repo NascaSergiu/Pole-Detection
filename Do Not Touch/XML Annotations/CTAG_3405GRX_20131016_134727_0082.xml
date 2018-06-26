@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><annotation>
-	<folder>Poles</folder>
-	<filename>CTAG_3405GRX_20131016_134727_0082.xml</filename>
-	<path>C:\Users\NSE4CLJ\Desktop\Poles\CTAG_3405GRX_20131016_134727_f000800.png</path>
+<annotation>
+	<folder>Positive Gray</folder>
+	<filename>CTAG_3405GRX_20131016_134727_0082.bmp</filename>
+	<path>/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray/CTAG_3405GRX_20131016_134727_0082.bmp</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -69,6 +69,30 @@
 			<ymin>166</ymin>
 			<xmax>179</xmax>
 			<ymax>354</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>426</xmin>
+			<ymin>289</ymin>
+			<xmax>435</xmax>
+			<ymax>377</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>632</xmin>
+			<ymin>232</ymin>
+			<xmax>639</xmax>
+			<ymax>391</ymax>
 		</bndbox>
 	</object>
 </annotation>

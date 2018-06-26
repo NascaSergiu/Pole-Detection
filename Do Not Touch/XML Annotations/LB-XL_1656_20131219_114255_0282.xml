@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><annotation>
-	<folder>Poles</folder>
-	<filename>LB-XL_1656_20131219_114255_0282.xml</filename>
-	<path>C:\Users\NSE4CLJ\Desktop\Poles\LB-XL_1656_20131219_114255_f001200.png</path>
+<annotation>
+	<folder>Positive Gray</folder>
+	<filename>LB-XL_1656_20131219_114255_0282.bmp</filename>
+	<path>/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray/LB-XL_1656_20131219_114255_0282.bmp</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -57,6 +57,42 @@
 			<ymin>180</ymin>
 			<xmax>224</xmax>
 			<ymax>415</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>493</xmin>
+			<ymin>241</ymin>
+			<xmax>504</xmax>
+			<ymax>332</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>695</xmin>
+			<ymin>169</ymin>
+			<xmax>715</xmax>
+			<ymax>375</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1094</xmin>
+			<ymin>50</ymin>
+			<xmax>1117</xmax>
+			<ymax>328</ymax>
 		</bndbox>
 	</object>
 </annotation>

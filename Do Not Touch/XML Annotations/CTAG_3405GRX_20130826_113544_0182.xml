@@ -1,7 +1,7 @@
 <annotation>
-	<folder>Positive Gray Scale</folder>
+	<folder>Positive Gray</folder>
 	<filename>CTAG_3405GRX_20130826_113544_0182.bmp</filename>
-	<path>C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Do Not Touch\Positive Gray Scale\CTAG_3405GRX_20130826_113544_0182.bmp</path>
+	<path>/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray/CTAG_3405GRX_20130826_113544_0182.bmp</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -41,10 +41,22 @@
 		<truncated>0</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>455</xmin>
-			<ymin>135</ymin>
-			<xmax>466</xmax>
+			<xmin>459</xmin>
+			<ymin>125</ymin>
+			<xmax>470</xmax>
 			<ymax>398</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>368</xmin>
+			<ymin>306</ymin>
+			<xmax>374</xmax>
+			<ymax>395</ymax>
 		</bndbox>
 	</object>
 </annotation>

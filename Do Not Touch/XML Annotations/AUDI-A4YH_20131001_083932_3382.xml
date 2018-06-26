@@ -1,7 +1,7 @@
 <annotation>
-	<folder>Positive Gray Scale</folder>
+	<folder>Positive Gray</folder>
 	<filename>AUDI-A4YH_20131001_083932_3382.bmp</filename>
-	<path>C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Do Not Touch\Positive Gray Scale\AUDI-A4YH_20131001_083932_3382.bmp</path>
+	<path>/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray/AUDI-A4YH_20131001_083932_3382.bmp</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -17,10 +17,10 @@
 		<truncated>0</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>1081</xmin>
-			<ymin>136</ymin>
-			<xmax>1090</xmax>
-			<ymax>374</ymax>
+			<xmin>1078</xmin>
+			<ymin>135</ymin>
+			<xmax>1095</xmax>
+			<ymax>372</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -29,22 +29,22 @@
 		<truncated>0</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>914</xmin>
-			<ymin>249</ymin>
-			<xmax>926</xmax>
+			<xmin>913</xmin>
+			<ymin>236</ymin>
+			<xmax>930</xmax>
+			<ymax>354</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>833</xmin>
+			<ymin>265</ymin>
+			<xmax>842</xmax>
 			<ymax>355</ymax>
-		</bndbox>
-	</object>
-	<object>
-		<name>pole</name>
-		<pose>Unspecified</pose>
-		<truncated>0</truncated>
-		<difficult>0</difficult>
-		<bndbox>
-			<xmin>832</xmin>
-			<ymin>268</ymin>
-			<xmax>839</xmax>
-			<ymax>359</ymax>
 		</bndbox>
 	</object>
 </annotation>

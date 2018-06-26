@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><annotation>
-	<folder>Poles</folder>
-	<filename>BK63XRG_20141011_174517_0282.xml</filename>
-	<path>C:\Users\NSE4CLJ\Desktop\Poles\BK63XRG_20141011_174517_f001200.png</path>
+<annotation>
+	<folder>Positive Gray</folder>
+	<filename>BK63XRG_20141011_174517_0282.bmp</filename>
+	<path>/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray/BK63XRG_20141011_174517_0282.bmp</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -45,6 +45,18 @@
 			<ymin>1</ymin>
 			<xmax>1116</xmax>
 			<ymax>445</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>278</xmin>
+			<ymin>216</ymin>
+			<xmax>287</xmax>
+			<ymax>421</ymax>
 		</bndbox>
 	</object>
 </annotation>

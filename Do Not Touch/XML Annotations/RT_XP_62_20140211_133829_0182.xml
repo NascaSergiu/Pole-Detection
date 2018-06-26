@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><annotation>
-	<folder>Poles</folder>
-	<filename>RT_XP_62_20140211_133829_0182.xml</filename>
-	<path>C:\Users\NSE4CLJ\Desktop\Poles\RT_XP_62_20140211_133829_f001001.png</path>
+<annotation>
+	<folder>Positive Gray</folder>
+	<filename>RT_XP_62_20140211_133829_0182.bmp</filename>
+	<path>/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray/RT_XP_62_20140211_133829_0182.bmp</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -81,6 +81,30 @@
 			<ymin>127</ymin>
 			<xmax>24</xmax>
 			<ymax>376</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>730</xmin>
+			<ymin>231</ymin>
+			<xmax>738</xmax>
+			<ymax>363</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>895</xmin>
+			<ymin>229</ymin>
+			<xmax>903</xmax>
+			<ymax>349</ymax>
 		</bndbox>
 	</object>
 </annotation>

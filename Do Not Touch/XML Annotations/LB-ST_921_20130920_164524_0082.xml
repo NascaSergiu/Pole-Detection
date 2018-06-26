@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><annotation>
-	<folder>Poles</folder>
-	<filename>LB-ST_921_20130920_164524_0082.xml</filename>
-	<path>C:\Users\NSE4CLJ\Desktop\Poles\LB-ST_921_20130920_164524_f000801.png</path>
+<annotation>
+	<folder>Positive Gray</folder>
+	<filename>LB-ST_921_20130920_164524_0082.bmp</filename>
+	<path>/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray/LB-ST_921_20130920_164524_0082.bmp</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -45,6 +45,18 @@
 			<ymin>213</ymin>
 			<xmax>558</xmax>
 			<ymax>392</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>226</xmin>
+			<ymin>238</ymin>
+			<xmax>237</xmax>
+			<ymax>396</ymax>
 		</bndbox>
 	</object>
 </annotation>

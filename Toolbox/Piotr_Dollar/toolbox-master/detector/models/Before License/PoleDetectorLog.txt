@@ -1,0 +1,103 @@
+---------------------------------------------------------------------------
+Training stage 0
+Sampled 375 windows from 250 images.
+Done sampling windows (time=53s).
+Computing lambdas... done (time=5s).
+Extracting features... done (time=1s).
+Sampled 6045 windows from 250 images.
+Done sampling windows (time=57s).
+Extracting features... done (time=6s).
+Training AdaBoost: nWeak= 64 nFtrs=31050 pos=750 neg=6045
+ i=  16 alpha=1.492 err=0.048 loss=7.75e-07
+ i=  32 alpha=1.823 err=0.025 loss=1.52e-12
+ i=  48 alpha=1.611 err=0.038 loss=8.79e-19
+ i=  64 alpha=1.559 err=0.042 loss=4.45e-25
+Done training err=0.0000 fp=0.0000 fn=0.0000 (t=28.8s).
+Done training stage 0 (time=151s).
+---------------------------------------------------------------------------
+Training stage 1
+Sampled 2257 windows from 250 images.
+Done sampling windows (time=72s).
+Extracting features... done (time=2s).
+Training AdaBoost: nWeak=256 nFtrs=31050 pos=750 neg=8302
+ i=  16 alpha=1.009 err=0.117 loss=8.42e-04
+ i=  32 alpha=1.174 err=0.087 loss=5.85e-07
+ i=  48 alpha=0.920 err=0.137 loss=5.68e-10
+ i=  64 alpha=1.066 err=0.106 loss=5.80e-13
+ i=  80 alpha=1.055 err=0.108 loss=4.64e-16
+ i=  96 alpha=0.990 err=0.121 loss=4.75e-19
+ i= 112 alpha=0.939 err=0.133 loss=3.38e-22
+ i= 128 alpha=0.907 err=0.140 loss=4.70e-25
+ i= 144 alpha=1.055 err=0.108 loss=2.81e-28
+ i= 160 alpha=1.035 err=0.112 loss=2.60e-31
+ i= 176 alpha=1.041 err=0.111 loss=1.75e-34
+ i= 192 alpha=0.831 err=0.160 loss=1.19e-37
+ i= 208 alpha=0.853 err=0.154 loss=1.33e-40
+ stopping early
+Done training err=0.0000 fp=0.0000 fn=0.0000 (t=140.1s).
+Done training stage 1 (time=216s).
+---------------------------------------------------------------------------
+Training stage 2
+Sampled 664 windows from 250 images.
+Done sampling windows (time=80s).
+Extracting features... done (time=1s).
+Training AdaBoost: nWeak=1024 nFtrs=31050 pos=750 neg=8966
+ i=  16 alpha=0.687 err=0.202 loss=8.21e-03
+ i=  32 alpha=0.824 err=0.161 loss=9.92e-05
+ i=  48 alpha=0.807 err=0.166 loss=1.46e-06
+ i=  64 alpha=0.801 err=0.168 loss=1.83e-08
+ i=  80 alpha=0.764 err=0.178 loss=3.13e-10
+ i=  96 alpha=0.725 err=0.190 loss=3.71e-12
+ i= 112 alpha=0.797 err=0.169 loss=4.94e-14
+ i= 128 alpha=0.891 err=0.144 loss=6.75e-16
+ i= 144 alpha=0.694 err=0.200 loss=1.42e-17
+ i= 160 alpha=0.788 err=0.171 loss=2.91e-19
+ i= 176 alpha=0.656 err=0.212 loss=2.38e-21
+ i= 192 alpha=0.800 err=0.168 loss=4.80e-23
+ i= 208 alpha=0.759 err=0.180 loss=7.70e-25
+ i= 224 alpha=0.742 err=0.185 loss=1.09e-26
+ i= 240 alpha=0.638 err=0.218 loss=1.76e-28
+ i= 256 alpha=0.705 err=0.196 loss=2.46e-30
+ i= 272 alpha=0.759 err=0.180 loss=3.56e-32
+ i= 288 alpha=0.847 err=0.155 loss=3.73e-34
+ i= 304 alpha=0.864 err=0.151 loss=4.28e-36
+ i= 320 alpha=0.653 err=0.213 loss=7.84e-38
+ i= 336 alpha=0.604 err=0.230 loss=8.55e-40
+ stopping early
+Done training err=0.0000 fp=0.0000 fn=0.0000 (t=245.1s).
+Done training stage 2 (time=327s).
+---------------------------------------------------------------------------
+Training stage 3
+Sampled 182 windows from 250 images.
+Done sampling windows (time=72s).
+Extracting features... done (time=0s).
+Training AdaBoost: nWeak=4096 nFtrs=31050 pos=750 neg=9148
+ i=  16 alpha=0.676 err=0.206 loss=1.81e-02
+ i=  32 alpha=0.687 err=0.202 loss=5.05e-04
+ i=  48 alpha=0.726 err=0.190 loss=1.07e-05
+ i=  64 alpha=0.630 err=0.221 loss=3.66e-07
+ i=  80 alpha=0.755 err=0.181 loss=1.11e-08
+ i=  96 alpha=0.516 err=0.263 loss=3.12e-10
+ i= 112 alpha=0.761 err=0.179 loss=8.29e-12
+ i= 128 alpha=0.821 err=0.162 loss=2.38e-13
+ i= 144 alpha=0.765 err=0.178 loss=4.70e-15
+ i= 160 alpha=0.652 err=0.214 loss=1.14e-16
+ i= 176 alpha=0.680 err=0.204 loss=3.47e-18
+ i= 192 alpha=0.759 err=0.180 loss=1.14e-19
+ i= 208 alpha=0.667 err=0.209 loss=2.96e-21
+ i= 224 alpha=0.646 err=0.216 loss=8.04e-23
+ i= 240 alpha=0.488 err=0.274 loss=1.81e-24
+ i= 256 alpha=0.827 err=0.161 loss=3.94e-26
+ i= 272 alpha=0.783 err=0.173 loss=7.96e-28
+ i= 288 alpha=0.691 err=0.201 loss=1.65e-29
+ i= 304 alpha=0.639 err=0.218 loss=3.97e-31
+ i= 320 alpha=0.770 err=0.177 loss=1.08e-32
+ i= 336 alpha=0.763 err=0.178 loss=2.08e-34
+ i= 352 alpha=0.715 err=0.193 loss=5.15e-36
+ i= 368 alpha=0.725 err=0.190 loss=9.91e-38
+ i= 384 alpha=0.726 err=0.190 loss=2.02e-39
+ stopping early
+Done training err=0.0000 fp=0.0000 fn=0.0000 (t=288.5s).
+Done training stage 3 (time=362s).
+---------------------------------------------------------------------------
+Done training (time=1056s).

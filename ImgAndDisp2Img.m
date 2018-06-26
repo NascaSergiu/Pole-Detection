@@ -13,7 +13,7 @@ IDisp = double(IDisp);
 
 for i = 1:size(IDisp, 1)
     for j = 1:size(IDisp, 2)
-        if bitand(IDisp(i, j, 1), opts.uniquenessFlagU16) ~= 0
+        if bitand(IDisp(i, j, 1), bitor(opts.periodicalFlagU16, opts.uniquenessFlagU16)) ~= 0
             IDisp(i, j, 1) = 0;
         end
     end
@@ -26,12 +26,25 @@ imgOut = (opts.baseline * opts.focalLength) ./ IDisp;
 for x = 1:size(imgOut, 1)
     for y = 1:size(imgOut, 2)
         if imgOut(x, y) > opts.maxDepth || imgOut(x,y) == Inf
-            imgOut(x, y) = 255;
+            imgOut(x, y) = 0;
         else
-            imgOut(x, y) = multiFactor * imgOut(x, y);
+            imgOut(x, y) = 255 - multiFactor * imgOut(x, y);
         end
     end
 end
+
+% figure(21);
+% im(imgOut);
+
+imgOut = medfilt2(imgOut, [7 7]);
+
+% imgOut = imcomplement(imfill(imcomplement(imgOut),'holes'));
+% imgOut = imfill(imgOut);
+
+imgOut = uint8(255 * mat2gray(imgOut));
+imgOut = imadjust(imgOut);
+
+imwrite(imgOut, '/Users/nascasergiualin/Documents/Output Movie Bosch/Pole Detection/img_Disp.png');
 
 imgOut = lensdistort(imgOut, 0.09);
 imgOut = imgOut(:, 7:size(imgOut,2)-7);
@@ -39,16 +52,8 @@ imgOut = imresize(imgOut, [700 1230]);
 imgOut = padarray(imgOut, [20 20], 255, 'pre');
 imgOut = padarray(imgOut, [0 30], 255, 'post');
 
-%imgOut = imcomplement(imfill(imcomplement(imgOut),'holes'));
-imgOut = imfill(imgOut);
-
-imgOut = uint8(255 * mat2gray(imgOut));
-imgOut = imadjust(imgOut);
-
-figure(20);
-im(imgOut);
-
-% imwrite(imgOut, '/Users/nascasergiualin/Documents/Output Movie Bosch/Pole Detection/img_Disp.png');
+% figure(20);
+% im(imgOut);
 
 end
 

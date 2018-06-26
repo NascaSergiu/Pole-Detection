@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><annotation>
-	<folder>Poles</folder>
-	<filename>AUDI-A4YH_20140223_153720_0282.xml</filename>
-	<path>C:\Users\NSE4CLJ\Desktop\Poles\AUDI-A4YH_20140223_153720_f001201.png</path>
+<annotation>
+	<folder>Positive Gray</folder>
+	<filename>AUDI-A4YH_20140223_153720_0282.bmp</filename>
+	<path>/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray/AUDI-A4YH_20140223_153720_0282.bmp</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -81,6 +81,30 @@
 			<ymin>96</ymin>
 			<xmax>1211</xmax>
 			<ymax>425</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>109</xmin>
+			<ymin>180</ymin>
+			<xmax>123</xmax>
+			<ymax>353</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>397</xmin>
+			<ymin>176</ymin>
+			<xmax>407</xmax>
+			<ymax>355</ymax>
 		</bndbox>
 	</object>
 </annotation>

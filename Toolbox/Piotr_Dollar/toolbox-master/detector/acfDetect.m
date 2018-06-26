@@ -45,15 +45,23 @@ if(~isempty(fileName) && exist(fileName,'file'))
     return; 
 end
 if(~multiple)
-    bbs=acfDetectImg(I,detector); 
+    bbs=acfDetectImg(I, detector); 
 else
-  n=length(I); 
-  bbs=cell(n,1);
-  Img = I(1, :);
-  Disp = I(2, :);
-  parfor i=1:n
-      %bbs{i}=acfDetectImg(I{i},detector); 
-      bbs{i} = acfDetectImgDisp(Img{i}, Disp{i}, detector);
+    useDispImage = detector.opts.useDispImage;
+    n=length(I); 
+    bbs=cell(n,1);
+    Img = I(1, :);
+    
+    if( useDispImage == 1 )
+        Disp = I(2, :);
+    end
+  
+  for i=1:n
+      if( useDispImage == 1 )
+          bbs{i} = acfDetectImgDisp(Img{i}, Disp{i}, detector);
+      else
+          bbs{i}=acfDetectImg(I{i}, detector);
+      end
   end
 end
 

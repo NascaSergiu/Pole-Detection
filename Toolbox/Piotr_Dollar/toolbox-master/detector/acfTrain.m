@@ -218,6 +218,7 @@ dfs = {
     'pBoost', {}, ...
     'seed', 0, ...
     'name', '', ...
+    'useDispImage', 0, ...
     'posGtDir', '', ...
     'posImgDir', '', ...
     'negImgDir', '', ...
@@ -317,7 +318,11 @@ else
     fs={opts.negImgDir};
     
     if(hasGt)
-        fs={opts.posImgDir, opts.posGtDir, opts.dispPgmDir};
+        if(opts.useDispImage == 1)
+            fs={opts.posImgDir, opts.posGtDir, opts.dispPgmDir};
+        else
+            fs={opts.posImgDir, opts.posGtDir};
+        end
     end
     
     fs = bbGt('getFiles',fs);
@@ -338,17 +343,21 @@ else
         Is1 = cell( 1, batch );
         parfor j = 1:batch, ij = i+j;
             I = feval(opts.imreadf,fs{1,ij},opts.imreadp{:}); %#ok<PFBNS>
-            IDisp = feval(opts.imreadf,fs{3,ij},opts.imreadp{:});
             
-            I = ImgAndDisp2Img(I, IDisp, opts.pPyramid.pChns.pDisparity);
+            % if disp image is specified than we combine and make only one
+            % image
+            if(opts.useDispImage == 1)
+                IDisp = feval(opts.imreadf,fs{3,ij},opts.imreadp{:});
+                I = ImgAndDisp2Img(I, IDisp, opts.pPyramid.pChns.pDisparity);
+            end
             
             gt = [];
             if(hasGt)
                 [~,gt] = bbGt('bbLoad', fs{2,ij}, opts.pLoad);
-            end
-            
-            if( opts.removeAnnotDepth )
-                gt = bbGt('preProcessing', gt, I, opts);
+                
+                if( opts.removeAnnotDepth && opts.useDispImage == 1)
+                    gt = bbGt('preProcessing', gt, I, opts);
+                end
             end
             
             Is1{j} = sampleWins1( I, gt, detector, stage, positive );
@@ -458,12 +467,20 @@ end
 function chns = chnsCompute1( Is, opts )
 % Compute single scale channels of dimensions modelDsPad.
 if(isempty(Is)), chns=[]; return; end
-fprintf('Extracting features... '); start=clock; fs=opts.filters;
-pChns=opts.pPyramid.pChns; smooth=opts.pPyramid.smooth;
-dsTar=opts.modelDsPad/pChns.shrink; ds=size(Is); ds(1:end-1)=1;
-Is=squeeze(mat2cell2(Is,ds)); n=length(Is); chns=cell(1,n);
+fprintf('Extracting features... '); 
+start=clock; 
+fs=opts.filters;
+pChns=opts.pPyramid.pChns; 
+smooth=opts.pPyramid.smooth;
+dsTar=opts.modelDsPad/pChns.shrink; 
+ds=size(Is); 
+ds(1:end-1)=1;
+Is=squeeze(mat2cell2(Is,ds)); 
+n=length(Is); 
+chns=cell(1,n);
 parfor i=1:n
-    C=chnsCompute(Is{i},pChns); C=convTri(cat(3,C.data{:}),smooth);
+    C=chnsCompute(Is{i},pChns); 
+    C=convTri(cat(3,C.data{:}),smooth);
     if(~isempty(fs)), C=repmat(C,[1 1 size(fs,4)]);
         for j=1:size(C,3), C(:,:,j)=conv2(C(:,:,j),fs(:,:,j),'same'); end; end
     if(~isempty(fs)), C=imResample(C,.5); shr=2; else shr=1; end

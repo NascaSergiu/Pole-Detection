@@ -1,7 +1,7 @@
 <annotation>
-	<folder>Positive Gray Scale</folder>
+	<folder>Positive Gray</folder>
 	<filename>BK63XRG_20141011_174517_0082.bmp</filename>
-	<path>C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Do Not Touch\Positive Gray Scale\BK63XRG_20141011_174517_0082.bmp</path>
+	<path>/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray/BK63XRG_20141011_174517_0082.bmp</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -79,8 +79,8 @@
 		<bndbox>
 			<xmin>254</xmin>
 			<ymin>218</ymin>
-			<xmax>263</xmax>
-			<ymax>350</ymax>
+			<xmax>262</xmax>
+			<ymax>338</ymax>
 		</bndbox>
 	</object>
 	<object>
@@ -89,8 +89,8 @@
 		<truncated>0</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>455</xmin>
-			<ymin>269</ymin>
+			<xmin>457</xmin>
+			<ymin>270</ymin>
 			<xmax>465</xmax>
 			<ymax>410</ymax>
 		</bndbox>

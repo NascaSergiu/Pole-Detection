@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><annotation>
-	<folder>Poles</folder>
-	<filename>RT-ZD_627_20140317_111422_0182.xml</filename>
-	<path>C:\Users\NSE4CLJ\Desktop\Poles\RT-ZD_627_20140317_111422_f001001.png</path>
+<annotation>
+	<folder>Positive Gray</folder>
+	<filename>RT-ZD_627_20140317_111422_0182.bmp</filename>
+	<path>/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray/RT-ZD_627_20140317_111422_0182.bmp</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -21,6 +21,18 @@
 			<ymin>48</ymin>
 			<xmax>851</xmax>
 			<ymax>406</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>714</xmin>
+			<ymin>196</ymin>
+			<xmax>725</xmax>
+			<ymax>381</ymax>
 		</bndbox>
 	</object>
 </annotation>

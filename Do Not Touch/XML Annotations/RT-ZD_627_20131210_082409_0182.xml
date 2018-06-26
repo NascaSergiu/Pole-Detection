@@ -1,7 +1,7 @@
-<annotation>
-	<folder>Positive Gray Scale</folder>
-	<filename>RT-ZD_627_20131210_082409_0182.bmp</filename>
-	<path>C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Do Not Touch\Positive Gray Scale\RT-ZD_627_20131210_082409_0182.bmp</path>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><annotation>
+	<folder>Poles</folder>
+	<filename>RT-ZD_627_20131210_082409_0182.xml</filename>
+	<path>C:\Users\NSE4CLJ\Desktop\Poles\RT-ZD_627_20131210_082409_f001001.png</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -18,9 +18,9 @@
 		<difficult>0</difficult>
 		<bndbox>
 			<xmin>352</xmin>
-			<ymin>81</ymin>
-			<xmax>382</xmax>
-			<ymax>472</ymax>
+			<ymin>210</ymin>
+			<xmax>377</xmax>
+			<ymax>471</ymax>
 		</bndbox>
 	</object>
 	<object>

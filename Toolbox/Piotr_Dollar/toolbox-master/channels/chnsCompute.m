@@ -193,6 +193,7 @@ ImgGray = [];
 ImgDisp = [];
 
 % compute color channels
+useDispImage = 1;
 p=pChns.pColor; 
 nm='color channels';
 if size(I, 3) == 4
@@ -203,14 +204,21 @@ elseif size(I, 3) == 2
     ImgGray = I(:,:,1);
     ImgDisp = I(:,:,2); 
 elseif size(I, 3) == 3
+    ImgGray = rgbConvert(I, p.colorSpace);
+    useDispImage = 0;
+elseif size(I, 3) == 1
     ImgGray = rgbConvert(I, p.colorSpace); 
+    useDispImage = 0;
 end
 
 ImgGray = single(ImgGray);
 ImgGray = convTri(ImgGray, p.smooth);
 
-ImgDisp = single(ImgDisp);
-ImgDisp = convTri(ImgDisp, p.smooth);
+if(useDispImage == 1)
+    ImgDisp = single(ImgDisp);
+    %ImgDisp = convTri(ImgDisp, p.smooth);
+end
+
 if(p.enabled)
     chns=addChn(chns, ImgGray, nm, p, 'replicate', h, w); 
 end
@@ -223,34 +231,37 @@ if(isfield(p,'full'))
     full = p.full; 
 end
 if( pChns.pGradHist.enabled )
-  [MGray, OGray] = gradientMag(ImgGray, p.colorChn, p.normRad, p.normConst, full);
+   p.normConst = 50;
+   p.normRad = 0.02;
+   [MGray, OGray] = gradientMag(ImgGray, p.colorChn, p.normRad, p.normConst, full);
 elseif( p.enabled )
-  MGray = gradientMag(ImgGray, p.colorChn, p.normRad, p.normConst, full);
+   MGray = gradientMag(ImgGray, p.colorChn, p.normRad, p.normConst, full);
 end
-
-% imwrite(MGray, '/Users/nascasergiualin/Documents/Output Movie Bosch/Pole Detection/imgMag.png');
 
 if(p.enabled)
     chns = addChn(chns, MGray, nm, p, 0, h, w); 
 end
 
 % compute gradient magnitude channel for disparity image
-p = pChns.pGradMagDisp; 
-nm = 'gradient magnitude disparity image';
-full = 0; 
-if(isfield(p,'full'))
-    full = p.full; 
-end
-if( pChns.pGradHist.enabled )
-  [MDisp, ODisp] = gradientMag(ImgDisp, p.colorChn, p.normRad, p.normConst, full);
-elseif( p.enabled )
-  MDisp = gradientMag(ImgDisp, p.colorChn, p.normRad, p.normConst, full);
-end
+% use this filter only if the disparity image is used
+if(useDispImage == 1)
+    p = pChns.pGradMagDisp; 
+    nm = 'gradient magnitude disparity image';
+    full = 0; 
+    if(isfield(p,'full'))
+        full = p.full; 
+    end
+    if( pChns.pGradHist.enabled )
+      [MDisp, ODisp] = gradientMag(ImgDisp, p.colorChn, p.normRad, p.normConst, full);
+      
+%       imwrite(MDisp, '/Users/nascasergiualin/Documents/Output Movie Bosch/Pole Detection/imgDispMag.png');
+    elseif( p.enabled )
+      MDisp = gradientMag(ImgDisp, p.colorChn, p.normRad, p.normConst, full);
+    end;
 
-% imwrite(MDisp, '/Users/nascasergiualin/Documents/Output Movie Bosch/Pole Detection/imgMagDisp.png');
-
-if(p.enabled)
-    chns = addChn(chns, MDisp, nm, p, 0, h, w); 
+    if(p.enabled)
+        chns = addChn(chns, MDisp, nm, p, 0, h, w); 
+    end
 end
 
 % compute gradient histgoram channels for gray image
@@ -263,22 +274,29 @@ if( p.enabled )
   end
   HGray = gradientHist(MGray, OGray, binSize, p.nOrients, p.softBin, p.useHog, p.clipHog, full);
   chns = addChn(chns, HGray, nm, pChns.pGradHist, 0, h, w);
+  
+%   for i=1:6
+%     imwrite(HGray(:,:,i), strcat('/Users/nascasergiualin/Documents/Output Movie Bosch/Pole Detection/imgHOGGray_', int2str((i-1)* 30), '.png'));
+%   end
 end
 
 % compute gradient histgoram channels for disparity image
-p = pChns.pGradHist; 
-nm = 'gradient histogram disparity image';
-if( p.enabled )
-  binSize = p.binSize; 
-  if(isempty(binSize))
-      binSize = shrink; 
-  end
-  HDisp = gradientHist(MDisp, ODisp, binSize, p.nOrients, p.softBin, p.useHog, p.clipHog, full);
-  chns = addChn(chns, HDisp, nm, pChns.pGradHist, 0, h, w);
-end
+% use this filter only if the disparity image is used
+if(useDispImage == 1)
+    p = pChns.pGradHist; 
+    nm = 'gradient histogram disparity image';
+    if( p.enabled )
+      binSize = p.binSize; 
+      if(isempty(binSize))
+          binSize = shrink; 
+      end
+      HDisp = gradientHist(MDisp, ODisp, binSize, p.nOrients, p.softBin, p.useHog, p.clipHog, full);
+      chns = addChn(chns, HDisp, nm, pChns.pGradHist, 0, h, w);
+    end
 
-for i=1:6
-%     imwrite(HDisp(:,:,i), strcat('/Users/nascasergiualin/Documents/Output Movie Bosch/Pole Detection/imgHOGDisp_', int2str((i-1)* 30), '.png'));
+%     for i=1:6
+%         imwrite(HDisp(:,:,i), strcat('/Users/nascasergiualin/Documents/Output Movie Bosch/Pole Detection/imgHOGDisp_', int2str((i-1)* 30), '.png'));
+%     end
 end
 
 % compute custom channels for gray image

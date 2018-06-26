@@ -1,7 +1,7 @@
 <annotation>
-	<folder>Positive Gray Scale</folder>
+	<folder>Positive Gray</folder>
 	<filename>VU14XYL_X760_20141220_111139_0082.bmp</filename>
-	<path>C:\Users\NSE4CLJ\Documents\GitHub\Pole-Detection\Do Not Touch\Positive Gray Scale\VU14XYL_X760_20141220_111139_0082.bmp</path>
+	<path>/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray/VU14XYL_X760_20141220_111139_0082.bmp</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -53,10 +53,10 @@
 		<truncated>0</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>236</xmin>
-			<ymin>310</ymin>
-			<xmax>247</xmax>
-			<ymax>454</ymax>
+			<xmin>1183</xmin>
+			<ymin>6</ymin>
+			<xmax>1224</xmax>
+			<ymax>571</ymax>
 		</bndbox>
 	</object>
 </annotation>

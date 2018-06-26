@@ -1,7 +1,7 @@
 <annotation>
-	<folder>Images</folder>
+	<folder>Positive Gray</folder>
 	<filename>LB-XL_814_20140311_133637_0082.bmp</filename>
-	<path>C:\Users\NSE4CLJ\Desktop\Images\LB-XL_814_20140311_133637_0082.bmp</path>
+	<path>/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray/LB-XL_814_20140311_133637_0082.bmp</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -33,6 +33,30 @@
 			<ymin>112</ymin>
 			<xmax>795</xmax>
 			<ymax>263</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>347</xmin>
+			<ymin>241</ymin>
+			<xmax>358</xmax>
+			<ymax>423</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>334</xmin>
+			<ymin>252</ymin>
+			<xmax>345</xmax>
+			<ymax>422</ymax>
 		</bndbox>
 	</object>
 </annotation>

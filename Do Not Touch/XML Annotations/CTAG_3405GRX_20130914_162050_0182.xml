@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><annotation>
-	<folder>Poles</folder>
-	<filename>CTAG_3405GRX_20130914_162050_0182.xml</filename>
-	<path>C:\Users\NSE4CLJ\Desktop\Poles\CTAG_3405GRX_20130914_162050_f001000.png</path>
+<annotation>
+	<folder>Positive Gray</folder>
+	<filename>CTAG_3405GRX_20130914_162050_0182.bmp</filename>
+	<path>/Users/nascasergiualin/Documents/GitHub/Pole-Detection/Positive Gray/CTAG_3405GRX_20130914_162050_0182.bmp</path>
 	<source>
 		<database>Unknown</database>
 	</source>
@@ -45,6 +45,54 @@
 			<ymin>249</ymin>
 			<xmax>608</xmax>
 			<ymax>385</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>111</xmin>
+			<ymin>282</ymin>
+			<xmax>118</xmax>
+			<ymax>345</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>221</xmin>
+			<ymin>267</ymin>
+			<xmax>228</xmax>
+			<ymax>341</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>311</xmin>
+			<ymin>313</ymin>
+			<xmax>317</xmax>
+			<ymax>363</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pole</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>384</xmin>
+			<ymin>313</ymin>
+			<xmax>390</xmax>
+			<ymax>380</ymax>
 		</bndbox>
 	</object>
 </annotation>
